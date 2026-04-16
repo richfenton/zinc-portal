@@ -3,1456 +3,592 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MyAccount — Powered by Zinc</title>
+<title>MyAccount — Zinc Group</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=DM+Serif+Display&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --brand-primary: #1a3a5c;
-    --brand-accent: #0ea5e9;
-    --brand-light: #e0f2fe;
-    --brand-success: #059669;
-    --brand-warning: #d97706;
-    --brand-danger: #dc2626;
-    --surface: #ffffff;
-    --surface-2: #f8fafc;
-    --surface-3: #f1f5f9;
-    --border: #e2e8f0;
-    --text-primary: #0f172a;
-    --text-secondary: #64748b;
-    --text-muted: #94a3b8;
-    --radius: 12px;
-    --radius-sm: 8px;
-    --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 4px 16px rgba(0,0,0,0.06);
-    --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
-    --font: 'DM Sans', sans-serif;
-    --font-display: 'DM Serif Display', serif;
-    --client-logo: "DEMO CLIENT";
-    --client-color: #1a3a5c;
-  }
-
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-
-  body {
-    font-family: var(--font);
-    background: var(--surface-2);
-    color: var(--text-primary);
-    min-height: 100vh;
-    font-size: 15px;
-    line-height: 1.6;
-  }
-
-  /* ── Layout ── */
-  .app { display: flex; flex-direction: column; min-height: 100vh; }
-
-  .topbar {
-    background: var(--brand-primary);
-    color: white;
-    padding: 0 24px;
-    height: 60px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    position: sticky; top: 0; z-index: 100;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.15);
-  }
-  .topbar-logo {
-    font-family: var(--font-display);
-    font-size: 20px;
-    letter-spacing: -0.3px;
-    color: white;
-  }
-  .topbar-logo span { color: var(--brand-accent); }
-  .topbar-right { display: flex; align-items: center; gap: 12px; }
-  .topbar-user {
-    font-size: 13px;
-    color: rgba(255,255,255,0.7);
-  }
-  .topbar-avatar {
-    width: 34px; height: 34px;
-    background: var(--brand-accent);
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 13px; font-weight: 600; color: white;
-    cursor: pointer;
-  }
-
-  .main-layout {
-    display: flex;
-    flex: 1;
-    max-width: 1100px;
-    margin: 0 auto;
-    width: 100%;
-    padding: 24px 16px;
-    gap: 24px;
-  }
-
-  /* ── Sidebar ── */
-  .sidebar {
-    width: 220px;
-    flex-shrink: 0;
-  }
-  .sidebar-account-card {
-    background: linear-gradient(135deg, var(--brand-primary) 0%, #0f2a45 100%);
-    border-radius: var(--radius);
-    padding: 20px;
-    color: white;
-    margin-bottom: 16px;
-  }
-  .sidebar-account-card .label {
-    font-size: 11px;
-    text-transform: uppercase;
-    letter-spacing: 0.8px;
-    color: rgba(255,255,255,0.5);
-    margin-bottom: 4px;
-  }
-  .sidebar-account-card .balance {
-    font-family: var(--font-display);
-    font-size: 28px;
-    color: white;
-    line-height: 1;
-    margin-bottom: 12px;
-  }
-  .sidebar-account-card .ref {
-    font-size: 12px;
-    color: rgba(255,255,255,0.6);
-  }
-  .sidebar-account-card .client-name {
-    font-size: 13px;
-    color: rgba(255,255,255,0.8);
-    margin-bottom: 2px;
-  }
-
-  .nav-menu { display: flex; flex-direction: column; gap: 2px; }
-  .nav-item {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px 12px;
-    border-radius: var(--radius-sm);
-    cursor: pointer;
-    color: var(--text-secondary);
-    font-size: 14px;
-    font-weight: 500;
-    transition: all 0.15s;
-    border: none; background: none; width: 100%; text-align: left;
-  }
-  .nav-item:hover { background: var(--surface-3); color: var(--text-primary); }
-  .nav-item.active {
-    background: var(--brand-light);
-    color: var(--brand-primary);
-    font-weight: 600;
-  }
-  .nav-icon { font-size: 16px; width: 20px; text-align: center; }
-
-  /* ── Main content ── */
-  .content { flex: 1; min-width: 0; }
-
-  /* ── Cards ── */
-  .card {
-    background: var(--surface);
-    border-radius: var(--radius);
-    border: 1px solid var(--border);
-    padding: 24px;
-    box-shadow: var(--shadow);
-    margin-bottom: 16px;
-  }
-  .card-title {
-    font-size: 16px;
-    font-weight: 600;
-    color: var(--text-primary);
-    margin-bottom: 16px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .card-title .icon { font-size: 18px; }
-
-  /* ── Buttons ── */
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 10px 20px;
-    border-radius: var(--radius-sm);
-    font-family: var(--font);
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    border: none;
-    transition: all 0.15s;
-    text-decoration: none;
-  }
-  .btn-primary {
-    background: var(--brand-primary);
-    color: white;
-  }
-  .btn-primary:hover { background: #0f2a45; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(26,58,92,0.3); }
-  .btn-accent {
-    background: var(--brand-accent);
-    color: white;
-  }
-  .btn-accent:hover { background: #0284c7; }
-  .btn-outline {
-    background: transparent;
-    color: var(--brand-primary);
-    border: 1.5px solid var(--brand-primary);
-  }
-  .btn-outline:hover { background: var(--brand-light); }
-  .btn-ghost {
-    background: transparent;
-    color: var(--text-secondary);
-    border: 1px solid var(--border);
-  }
-  .btn-ghost:hover { background: var(--surface-3); }
-  .btn-success { background: var(--brand-success); color: white; }
-  .btn-danger { background: var(--brand-danger); color: white; }
-  .btn-lg { padding: 14px 28px; font-size: 15px; border-radius: var(--radius); }
-  .btn-sm { padding: 7px 14px; font-size: 13px; }
-  .btn-block { width: 100%; justify-content: center; }
-
-  /* ── Form ── */
-  .form-group { margin-bottom: 16px; }
-  .form-label { display: block; font-size: 13px; font-weight: 600; color: var(--text-secondary); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.4px; }
-  .form-input {
-    width: 100%;
-    padding: 11px 14px;
-    border: 1.5px solid var(--border);
-    border-radius: var(--radius-sm);
-    font-family: var(--font);
-    font-size: 15px;
-    color: var(--text-primary);
-    background: var(--surface);
-    transition: border-color 0.15s;
-    outline: none;
-  }
-  .form-input:focus { border-color: var(--brand-accent); box-shadow: 0 0 0 3px rgba(14,165,233,0.12); }
-  .form-select {
-    width: 100%;
-    padding: 11px 14px;
-    border: 1.5px solid var(--border);
-    border-radius: var(--radius-sm);
-    font-family: var(--font);
-    font-size: 15px;
-    background: var(--surface);
-    color: var(--text-primary);
-    outline: none;
-    cursor: pointer;
-  }
-  .form-select:focus { border-color: var(--brand-accent); }
-  .form-hint { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
-  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-
-  /* ── Badges ── */
-  .badge {
-    display: inline-flex;
-    align-items: center;
-    padding: 3px 10px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 600;
-  }
-  .badge-blue { background: var(--brand-light); color: var(--brand-primary); }
-  .badge-green { background: #d1fae5; color: #065f46; }
-  .badge-amber { background: #fef3c7; color: #92400e; }
-  .badge-red { background: #fee2e2; color: #991b1b; }
-  .badge-gray { background: var(--surface-3); color: var(--text-secondary); }
-
-  /* ── Page headers ── */
-  .page-header { margin-bottom: 24px; }
-  .page-title { font-family: var(--font-display); font-size: 26px; color: var(--text-primary); margin-bottom: 4px; }
-  .page-subtitle { font-size: 14px; color: var(--text-secondary); }
-
-  /* ── Dashboard grid ── */
-  .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 16px; }
-  .stat-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 20px;
-    box-shadow: var(--shadow);
-  }
-  .stat-label { font-size: 12px; text-transform: uppercase; letter-spacing: 0.6px; color: var(--text-muted); font-weight: 600; margin-bottom: 6px; }
-  .stat-value { font-family: var(--font-display); font-size: 28px; color: var(--text-primary); line-height: 1; }
-  .stat-sub { font-size: 12px; color: var(--text-secondary); margin-top: 6px; }
-  .stat-card.accent { background: var(--brand-primary); border-color: var(--brand-primary); }
-  .stat-card.accent .stat-label { color: rgba(255,255,255,0.6); }
-  .stat-card.accent .stat-value { color: white; }
-  .stat-card.accent .stat-sub { color: rgba(255,255,255,0.7); }
-
-  /* ── Transaction list ── */
-  .tx-list { display: flex; flex-direction: column; gap: 0; }
-  .tx-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 14px 0;
-    border-bottom: 1px solid var(--border);
-  }
-  .tx-item:last-child { border-bottom: none; }
-  .tx-left { display: flex; align-items: center; gap: 12px; }
-  .tx-icon {
-    width: 36px; height: 36px;
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 15px;
-    flex-shrink: 0;
-  }
-  .tx-icon.credit { background: #d1fae5; }
-  .tx-icon.debit { background: #fee2e2; }
-  .tx-icon.plan { background: var(--brand-light); }
-  .tx-desc { font-size: 14px; font-weight: 500; }
-  .tx-date { font-size: 12px; color: var(--text-muted); }
-  .tx-amount { font-size: 15px; font-weight: 600; }
-  .tx-amount.credit { color: var(--brand-success); }
-  .tx-amount.debit { color: var(--brand-danger); }
-
-  /* ── Progress bar ── */
-  .progress-wrap { background: var(--surface-3); border-radius: 99px; height: 8px; overflow: hidden; margin: 8px 0; }
-  .progress-fill { height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--brand-accent), var(--brand-primary)); transition: width 0.6s ease; }
-
-  /* ── Steps ── */
-  .steps { display: flex; gap: 0; margin-bottom: 28px; }
-  .step { flex: 1; text-align: center; position: relative; }
-  .step:not(:last-child)::after {
-    content: '';
-    position: absolute;
-    top: 16px;
-    left: 50%;
-    width: 100%;
-    height: 2px;
-    background: var(--border);
-  }
-  .step.done:not(:last-child)::after { background: var(--brand-accent); }
-  .step-circle {
-    width: 32px; height: 32px;
-    border-radius: 50%;
-    background: var(--surface-3);
-    border: 2px solid var(--border);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 12px; font-weight: 700;
-    margin: 0 auto 6px;
-    position: relative; z-index: 1;
-    color: var(--text-muted);
-  }
-  .step.done .step-circle { background: var(--brand-accent); border-color: var(--brand-accent); color: white; }
-  .step.active .step-circle { background: var(--brand-primary); border-color: var(--brand-primary); color: white; }
-  .step-label { font-size: 11px; color: var(--text-muted); font-weight: 500; }
-  .step.active .step-label { color: var(--brand-primary); font-weight: 700; }
-
-  /* ── Alert ── */
-  .alert {
-    padding: 14px 16px;
-    border-radius: var(--radius-sm);
-    font-size: 14px;
-    display: flex;
-    gap: 10px;
-    margin-bottom: 16px;
-    align-items: flex-start;
-  }
-  .alert-info { background: var(--brand-light); color: var(--brand-primary); border: 1px solid #bae6fd; }
-  .alert-success { background: #d1fae5; color: #065f46; border: 1px solid #6ee7b7; }
-  .alert-warning { background: #fef3c7; color: #92400e; border: 1px solid #fcd34d; }
-  .alert-danger { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
-
-  /* ── I&E categories ── */
-  .ie-section { margin-bottom: 20px; }
-  .ie-section-title { font-size: 13px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: var(--text-muted); margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px solid var(--border); }
-  .ie-row { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; }
-  .ie-row-label { font-size: 14px; color: var(--text-primary); flex: 1; }
-  .ie-input { width: 110px; padding: 7px 10px; border: 1.5px solid var(--border); border-radius: 6px; font-family: var(--font); font-size: 14px; text-align: right; outline: none; }
-  .ie-input:focus { border-color: var(--brand-accent); }
-  .ie-totals { background: var(--surface-3); border-radius: var(--radius-sm); padding: 16px; }
-  .ie-total-row { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 6px; }
-  .ie-total-row.surplus { font-weight: 700; font-size: 16px; color: var(--brand-success); }
-  .ie-total-row.deficit { font-weight: 700; font-size: 16px; color: var(--brand-danger); }
-
-  /* ── Payment method pills ── */
-  .pay-methods { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
-  .pay-pill {
-    display: flex; align-items: center; gap: 8px;
-    padding: 10px 16px;
-    border: 2px solid var(--border);
-    border-radius: var(--radius);
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 500;
-    transition: all 0.15s;
-    background: var(--surface);
-  }
-  .pay-pill:hover { border-color: var(--brand-accent); }
-  .pay-pill.selected { border-color: var(--brand-primary); background: var(--brand-light); color: var(--brand-primary); }
-  .pay-pill .pill-icon { font-size: 20px; }
-
-  /* ── Discount offer card ── */
-  .offer-card {
-    background: linear-gradient(135deg, #0f2a45 0%, #1a3a5c 50%, #0e4c72 100%);
-    border-radius: var(--radius);
-    padding: 28px;
-    color: white;
-    position: relative;
-    overflow: hidden;
-    margin-bottom: 16px;
-  }
-  .offer-card::before {
-    content: '';
-    position: absolute;
-    top: -40px; right: -40px;
-    width: 160px; height: 160px;
-    border-radius: 50%;
-    background: rgba(14,165,233,0.15);
-  }
-  .offer-badge {
-    display: inline-flex;
-    background: var(--brand-accent);
-    color: white;
-    padding: 4px 12px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.6px;
-    margin-bottom: 12px;
-  }
-  .offer-title { font-family: var(--font-display); font-size: 24px; margin-bottom: 8px; }
-  .offer-desc { font-size: 14px; color: rgba(255,255,255,0.75); margin-bottom: 20px; line-height: 1.7; }
-  .offer-amount { font-family: var(--font-display); font-size: 36px; margin-bottom: 4px; }
-  .offer-was { font-size: 13px; color: rgba(255,255,255,0.5); text-decoration: line-through; }
-
-  /* ── Breathing space ── */
-  .bs-info { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
-  .bs-point { display: flex; gap: 10px; align-items: flex-start; }
-  .bs-dot { width: 22px; height: 22px; border-radius: 50%; background: var(--brand-light); display: flex; align-items: center; justify-content: center; font-size: 11px; flex-shrink: 0; margin-top: 1px; }
-
-  /* ── Auth screens ── */
-  .auth-wrap {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: linear-gradient(160deg, #0f172a 0%, #1a3a5c 50%, #0e4c72 100%);
-    padding: 24px;
-  }
-  .auth-card {
-    background: white;
-    border-radius: 20px;
-    padding: 40px;
-    width: 100%;
-    max-width: 440px;
-    box-shadow: 0 24px 80px rgba(0,0,0,0.3);
-  }
-  .auth-logo { font-family: var(--font-display); font-size: 24px; color: var(--brand-primary); margin-bottom: 8px; }
-  .auth-logo span { color: var(--brand-accent); }
-  .auth-subtitle { font-size: 14px; color: var(--text-secondary); margin-bottom: 32px; }
-  .auth-title { font-size: 22px; font-weight: 600; color: var(--text-primary); margin-bottom: 6px; }
-
-  /* ── Footer ── */
-  .portal-footer {
-    background: var(--brand-primary);
-    color: rgba(255,255,255,0.5);
-    padding: 20px 24px;
-    font-size: 12px;
-    text-align: center;
-    line-height: 1.8;
-  }
-  .portal-footer a { color: rgba(255,255,255,0.6); text-decoration: none; }
-
-  /* ── Divider ── */
-  .divider { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
-
-  /* ── Summary row ── */
-  .summary-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
-  .summary-row:last-child { border-bottom: none; font-weight: 600; font-size: 15px; }
-  .summary-key { color: var(--text-secondary); }
-
-  /* ── Open banking ── */
-  .ob-providers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 20px; }
-  .ob-provider {
-    border: 1.5px solid var(--border);
-    border-radius: var(--radius-sm);
-    padding: 14px 10px;
-    text-align: center;
-    cursor: pointer;
-    transition: all 0.15s;
-  }
-  .ob-provider:hover { border-color: var(--brand-accent); background: var(--brand-light); }
-  .ob-provider .bank-logo { font-size: 24px; display: block; margin-bottom: 6px; }
-  .ob-provider .bank-name { font-size: 12px; font-weight: 600; color: var(--text-secondary); }
-
-  /* ── Accessibility bar ── */
-  .access-bar {
-    background: #1a3a5c;
-    color: rgba(255,255,255,0.75);
-    padding: 8px 24px;
-    font-size: 12px;
-    display: flex;
-    gap: 20px;
-    align-items: center;
-    flex-wrap: wrap;
-  }
-  .access-bar a { color: var(--brand-accent); text-decoration: none; }
-
-  /* ── Multi-account switcher ── */
-  .account-switcher { margin-bottom: 16px; }
-  .account-tab {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 14px;
-    border-radius: var(--radius-sm);
-    border: 1.5px solid var(--border);
-    background: var(--surface);
-    cursor: pointer;
-    font-size: 13px;
-    font-weight: 500;
-    margin-right: 8px;
-    margin-bottom: 8px;
-    transition: all 0.15s;
-  }
-  .account-tab.active { border-color: var(--brand-primary); background: var(--brand-light); color: var(--brand-primary); }
-  .account-tab:hover:not(.active) { border-color: var(--text-secondary); }
-
-  /* ── Plan confirmation ── */
-  .plan-summary {
-    background: var(--surface-3);
-    border-radius: var(--radius-sm);
-    padding: 20px;
-    margin-bottom: 20px;
-  }
-
-  /* ── Utilities ── */
-  .text-center { text-align: center; }
-  .text-right { text-align: right; }
-  .mt-4 { margin-top: 4px; }
-  .mt-8 { margin-top: 8px; }
-  .mt-12 { margin-top: 12px; }
-  .mt-16 { margin-top: 16px; }
-  .mt-24 { margin-top: 24px; }
-  .mb-4 { margin-bottom: 4px; }
-  .mb-8 { margin-bottom: 8px; }
-  .mb-16 { margin-bottom: 16px; }
-  .flex { display: flex; }
-  .items-center { align-items: center; }
-  .justify-between { justify-content: space-between; }
-  .gap-8 { gap: 8px; }
-  .gap-12 { gap: 12px; }
-  .gap-16 { gap: 16px; }
-  .hidden { display: none !important; }
-
-  /* ── Animations ── */
-  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
-  .fade-in { animation: fadeIn 0.25s ease both; }
-
-  /* ── Responsive ── */
-  @media (max-width: 768px) {
-    .main-layout { flex-direction: column; padding: 16px; }
-    .sidebar { width: 100%; }
-    .stat-grid { grid-template-columns: 1fr 1fr; }
-    .form-row { grid-template-columns: 1fr; }
-    .bs-info { grid-template-columns: 1fr; }
-    .ob-providers { grid-template-columns: repeat(2,1fr); }
-  }
-
-  /* ── Schedule payment ── */
-  .schedule-block {
-    border: 2px dashed var(--brand-accent);
-    border-radius: var(--radius);
-    padding: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    background: rgba(14,165,233,0.04);
-  }
-  .schedule-date-icon { font-size: 40px; line-height: 1; }
-  .schedule-text { flex: 1; font-size: 14px; color: var(--text-secondary); }
-  .schedule-text strong { display: block; color: var(--text-primary); font-size: 15px; margin-bottom: 2px; }
+:root{--brand-primary:#1a3a5c;--brand-accent:#0ea5e9;--brand-light:#e0f2fe;--brand-success:#059669;--brand-warning:#d97706;--brand-danger:#dc2626;--surface:#ffffff;--surface-2:#f8fafc;--surface-3:#f1f5f9;--border:#e2e8f0;--text-primary:#0f172a;--text-secondary:#64748b;--text-muted:#94a3b8;--radius:12px;--radius-sm:8px;--shadow:0 1px 3px rgba(0,0,0,0.06),0 4px 16px rgba(0,0,0,0.05);--font:'DM Sans',sans-serif;--font-display:'DM Serif Display',serif;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:var(--font);background:var(--surface-2);color:var(--text-primary);min-height:100vh;font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased;}
+.access-bar{background:#0f2a45;color:rgba(255,255,255,0.65);padding:7px 20px;font-size:12px;display:flex;gap:16px;align-items:center;flex-wrap:wrap;}
+.access-bar a{color:var(--brand-accent);text-decoration:none;}
+.topbar{background:var(--brand-primary);color:white;padding:0 24px;height:62px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:200;box-shadow:0 2px 16px rgba(0,0,0,0.18);}
+.topbar-logo{display:flex;align-items:center;gap:10px;}
+.topbar-logo-text{font-family:var(--font-display);font-size:21px;color:white;}
+.topbar-logo-text span{color:var(--brand-accent);}
+.topbar-logo-pill{background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);border-radius:20px;padding:2px 10px;font-size:11px;color:rgba(255,255,255,0.7);font-weight:500;}
+.topbar-right{display:flex;align-items:center;gap:10px;}
+.topbar-user{font-size:13px;color:rgba(255,255,255,0.65);}
+.topbar-avatar{width:34px;height:34px;background:var(--brand-accent);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:white;cursor:pointer;flex-shrink:0;}
+.topbar-logout{display:flex;align-items:center;gap:6px;padding:7px 14px;border-radius:var(--radius-sm);border:1px solid rgba(255,255,255,0.2);background:transparent;color:rgba(255,255,255,0.75);font-family:var(--font);font-size:13px;font-weight:500;cursor:pointer;transition:all 0.15s;}
+.topbar-logout:hover{background:rgba(255,255,255,0.1);color:white;}
+.mobile-menu-btn{display:none;background:none;border:none;color:white;cursor:pointer;padding:6px;}
+@media(max-width:768px){.mobile-menu-btn{display:flex;align-items:center;}.topbar-user{display:none;}}
+.app{display:flex;flex-direction:column;min-height:100vh;}
+.main-layout{display:flex;flex:1;max-width:1120px;margin:0 auto;width:100%;padding:28px 20px;gap:24px;}
+.sidebar{width:240px;flex-shrink:0;display:flex;flex-direction:column;gap:12px;}
+.sidebar-account-card{background:linear-gradient(145deg,#1a3a5c 0%,#0d2540 100%);border-radius:var(--radius);padding:20px;color:white;}
+.sac-label{font-size:11px;text-transform:uppercase;letter-spacing:0.9px;color:rgba(255,255,255,0.45);margin-bottom:4px;font-weight:600;}
+.sac-balance{font-family:var(--font-display);font-size:30px;color:white;line-height:1;margin-bottom:14px;}
+.sac-client{font-size:13px;color:rgba(255,255,255,0.8);font-weight:500;margin-bottom:2px;}
+.sac-ref{font-size:11px;color:rgba(255,255,255,0.45);}
+.sac-divider{border:none;border-top:1px solid rgba(255,255,255,0.1);margin:12px 0;}
+.sac-pay-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:10px;background:var(--brand-accent);border:none;border-radius:var(--radius-sm);color:white;font-family:var(--font);font-size:13px;font-weight:600;cursor:pointer;transition:all 0.15s;}
+.sac-pay-btn:hover{background:#0284c7;}
+.sac-pay-btn svg{width:16px;height:16px;}
+.nav-section-label{font-size:10px;text-transform:uppercase;letter-spacing:0.8px;color:var(--text-muted);font-weight:700;padding:0 12px;margin-bottom:4px;}
+.nav-menu{display:flex;flex-direction:column;gap:1px;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:var(--radius-sm);cursor:pointer;color:var(--text-secondary);font-size:14px;font-weight:500;transition:all 0.15s;border:none;background:none;width:100%;text-align:left;}
+.nav-item:hover{background:var(--surface-3);color:var(--text-primary);}
+.nav-item.active{background:var(--brand-light);color:var(--brand-primary);font-weight:600;}
+.nav-item.danger{color:var(--brand-danger);}
+.nav-item.danger:hover{background:#fee2e2;}
+.nav-svg{width:18px;height:18px;flex-shrink:0;color:var(--text-muted);}
+.nav-item:hover .nav-svg,.nav-item.active .nav-svg{color:inherit;}
+.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:150;}
+.sidebar-overlay.open{display:block;}
+@media(max-width:768px){
+  .sidebar{position:fixed;left:-280px;top:0;bottom:0;width:280px;z-index:160;background:var(--surface);padding:20px 16px;overflow-y:auto;transition:left 0.25s ease;box-shadow:0 8px 32px rgba(0,0,0,0.2);}
+  .sidebar.open{left:0;}
+  .main-layout{padding:16px;}
+}
+.content{flex:1;min-width:0;}
+.card{background:var(--surface);border-radius:var(--radius);border:1px solid var(--border);padding:24px;box-shadow:var(--shadow);margin-bottom:16px;}
+.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;}
+.card-title{font-size:15px;font-weight:600;color:var(--text-primary);display:flex;align-items:center;gap:8px;}
+.card-title-svg{width:18px;height:18px;color:var(--brand-accent);flex-shrink:0;}
+.card-link{font-size:13px;color:var(--brand-accent);font-weight:500;cursor:pointer;}
+.card-link:hover{text-decoration:underline;}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 22px;border-radius:var(--radius-sm);font-family:var(--font);font-size:14px;font-weight:600;cursor:pointer;border:none;transition:all 0.15s;text-decoration:none;white-space:nowrap;}
+.btn-primary{background:var(--brand-primary);color:white;}
+.btn-primary:hover{background:#0f2a45;transform:translateY(-1px);box-shadow:0 4px 14px rgba(26,58,92,0.3);}
+.btn-primary:disabled{opacity:0.45;cursor:not-allowed;transform:none;box-shadow:none;}
+.btn-accent{background:var(--brand-accent);color:white;}
+.btn-accent:hover{background:#0284c7;}
+.btn-outline{background:transparent;color:var(--brand-primary);border:1.5px solid var(--brand-primary);}
+.btn-outline:hover{background:var(--brand-light);}
+.btn-ghost{background:transparent;color:var(--text-secondary);border:1px solid var(--border);}
+.btn-ghost:hover{background:var(--surface-3);color:var(--text-primary);}
+.btn-lg{padding:14px 28px;font-size:15px;border-radius:var(--radius);}
+.btn-sm{padding:7px 14px;font-size:13px;border-radius:6px;}
+.btn-block{width:100%;}
+.btn svg{width:16px;height:16px;}
+.form-group{margin-bottom:18px;}
+.form-label{display:block;font-size:12px;font-weight:700;color:var(--text-secondary);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px;}
+.form-input{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:var(--font);font-size:15px;color:var(--text-primary);background:var(--surface);transition:border-color 0.15s,box-shadow 0.15s;outline:none;}
+.form-input:focus{border-color:var(--brand-accent);box-shadow:0 0 0 3px rgba(14,165,233,0.1);}
+.form-select{width:100%;padding:11px 14px;border:1.5px solid var(--border);border-radius:var(--radius-sm);font-family:var(--font);font-size:15px;background:var(--surface);color:var(--text-primary);outline:none;cursor:pointer;}
+.form-select:focus{border-color:var(--brand-accent);}
+.form-hint{font-size:12px;color:var(--text-muted);margin-top:5px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+@media(max-width:500px){.form-row{grid-template-columns:1fr;}}
+.badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:600;}
+.badge-blue{background:var(--brand-light);color:var(--brand-primary);}
+.badge-green{background:#d1fae5;color:#065f46;}
+.badge-amber{background:#fef3c7;color:#92400e;}
+.badge-red{background:#fee2e2;color:#991b1b;}
+.page-header{margin-bottom:24px;}
+.page-title{font-family:var(--font-display);font-size:26px;color:var(--text-primary);margin-bottom:3px;}
+.page-subtitle{font-size:14px;color:var(--text-secondary);}
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:16px;}
+@media(max-width:600px){.stat-grid{grid-template-columns:1fr 1fr;}}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;box-shadow:var(--shadow);}
+.stat-label{font-size:11px;text-transform:uppercase;letter-spacing:0.7px;color:var(--text-muted);font-weight:700;margin-bottom:6px;}
+.stat-value{font-family:var(--font-display);font-size:26px;color:var(--text-primary);line-height:1;}
+.stat-sub{font-size:12px;color:var(--text-secondary);margin-top:5px;}
+.stat-card.accent{background:var(--brand-primary);border-color:var(--brand-primary);}
+.stat-card.accent .stat-label{color:rgba(255,255,255,0.5);}
+.stat-card.accent .stat-value{color:white;}
+.stat-card.accent .stat-sub{color:rgba(255,255,255,0.6);}
+.tx-list{display:flex;flex-direction:column;}
+.tx-item{display:flex;align-items:center;justify-content:space-between;padding:13px 0;border-bottom:1px solid var(--border);}
+.tx-item:last-child{border-bottom:none;}
+.tx-left{display:flex;align-items:center;gap:12px;}
+.tx-icon{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.tx-icon svg{width:16px;height:16px;}
+.tx-icon.credit{background:#d1fae5;color:#059669;}
+.tx-icon.debit{background:#fee2e2;color:#dc2626;}
+.tx-icon.plan{background:var(--brand-light);color:var(--brand-primary);}
+.tx-desc{font-size:14px;font-weight:500;}
+.tx-date{font-size:12px;color:var(--text-muted);}
+.tx-amount{font-size:15px;font-weight:600;}
+.tx-amount.credit{color:var(--brand-success);}
+.tx-amount.debit{color:var(--brand-danger);}
+.progress-wrap{background:var(--surface-3);border-radius:99px;height:8px;overflow:hidden;margin:8px 0;}
+.progress-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--brand-accent),var(--brand-primary));transition:width 0.8s ease;}
+.alert{padding:13px 16px;border-radius:var(--radius-sm);font-size:14px;display:flex;gap:10px;margin-bottom:16px;align-items:flex-start;line-height:1.5;}
+.alert svg{width:18px;height:18px;flex-shrink:0;margin-top:1px;}
+.alert-info{background:var(--brand-light);color:var(--brand-primary);border:1px solid #bae6fd;}
+.alert-success{background:#d1fae5;color:#065f46;border:1px solid #6ee7b7;}
+.alert-warning{background:#fef3c7;color:#92400e;border:1px solid #fcd34d;}
+.alert-danger{background:#fee2e2;color:#991b1b;border:1px solid #fca5a5;}
+.ie-section{margin-bottom:22px;}
+.ie-section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.7px;color:var(--text-muted);margin-bottom:10px;padding-bottom:8px;border-bottom:2px solid var(--surface-3);}
+.ie-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--surface-3);}
+.ie-row:last-child{border-bottom:none;}
+.ie-row-label{font-size:14px;color:var(--text-primary);flex:1;}
+.ie-input-wrap{display:flex;align-items:center;gap:4px;}
+.ie-prefix{font-size:13px;color:var(--text-muted);font-weight:500;}
+.ie-input{width:100px;padding:6px 10px;border:1.5px solid var(--border);border-radius:6px;font-family:var(--font);font-size:14px;text-align:right;outline:none;color:var(--text-primary);}
+.ie-input:focus{border-color:var(--brand-accent);}
+.ie-totals{background:var(--surface-3);border-radius:var(--radius-sm);padding:18px;margin-top:8px;}
+.ie-total-row{display:flex;justify-content:space-between;font-size:14px;margin-bottom:8px;}
+.ie-total-row.result{font-weight:700;font-size:16px;padding-top:8px;border-top:2px solid var(--border);margin-bottom:0;}
+.ie-total-row.surplus{color:var(--brand-success);}
+.ie-total-row.deficit{color:var(--brand-danger);}
+.pay-methods{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;}
+.pay-pill{display:flex;align-items:center;gap:8px;padding:10px 16px;border:2px solid var(--border);border-radius:var(--radius);cursor:pointer;font-size:14px;font-weight:500;transition:all 0.15s;background:var(--surface);}
+.pay-pill:hover{border-color:var(--brand-accent);}
+.pay-pill.selected{border-color:var(--brand-primary);background:var(--brand-light);color:var(--brand-primary);}
+.pay-pill svg{width:18px;height:18px;}
+.offer-card{background:linear-gradient(135deg,#0f2a45 0%,#1a3a5c 60%,#0e4c72 100%);border-radius:var(--radius);padding:28px;color:white;position:relative;overflow:hidden;margin-bottom:16px;}
+.offer-card::before{content:'';position:absolute;top:-50px;right:-50px;width:200px;height:200px;border-radius:50%;background:rgba(14,165,233,0.12);}
+.offer-badge{display:inline-flex;background:var(--brand-accent);color:white;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.7px;margin-bottom:12px;}
+.offer-title{font-family:var(--font-display);font-size:24px;margin-bottom:8px;}
+.offer-desc{font-size:14px;color:rgba(255,255,255,0.7);margin-bottom:20px;line-height:1.7;}
+.offer-was{font-size:13px;color:rgba(255,255,255,0.4);text-decoration:line-through;margin-bottom:4px;}
+.offer-amount{font-family:var(--font-display);font-size:40px;line-height:1;margin-bottom:20px;}
+.bs-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:20px;}
+@media(max-width:600px){.bs-grid{grid-template-columns:1fr;}}
+.bs-point{display:flex;gap:10px;align-items:flex-start;padding:14px;background:var(--surface-3);border-radius:var(--radius-sm);}
+.bs-icon{width:32px;height:32px;border-radius:50%;background:var(--brand-light);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.bs-icon svg{width:16px;height:16px;color:var(--brand-primary);}
+.bs-point-title{font-size:13px;font-weight:700;margin-bottom:2px;}
+.bs-point-desc{font-size:12px;color:var(--text-secondary);line-height:1.5;}
+.auth-wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(160deg,#0a1628 0%,#1a3a5c 55%,#0e4c72 100%);padding:24px;}
+.auth-card{background:white;border-radius:20px;padding:40px;width:100%;max-width:440px;box-shadow:0 32px 80px rgba(0,0,0,0.35);}
+.auth-logo{font-family:var(--font-display);font-size:22px;color:var(--brand-primary);margin-bottom:4px;}
+.auth-logo span{color:var(--brand-accent);}
+.auth-tagline{font-size:13px;color:var(--text-muted);margin-bottom:28px;}
+.auth-title{font-size:20px;font-weight:700;color:var(--text-primary);margin-bottom:4px;}
+.auth-subtitle{font-size:14px;color:var(--text-secondary);margin-bottom:24px;line-height:1.6;}
+.auth-steps{display:flex;gap:6px;margin-bottom:28px;}
+.auth-step{flex:1;height:3px;border-radius:99px;background:var(--surface-3);}
+.auth-step.done{background:var(--brand-accent);}
+.auth-step.active{background:var(--brand-primary);}
+.auth-help{margin-top:20px;padding-top:20px;border-top:1px solid var(--border);font-size:12px;color:var(--text-muted);line-height:1.9;text-align:center;}
+.summary-row{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--border);font-size:14px;}
+.summary-row:last-child{border-bottom:none;font-weight:700;font-size:15px;padding-top:14px;}
+.summary-key{color:var(--text-secondary);}
+.ob-providers{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;}
+@media(max-width:500px){.ob-providers{grid-template-columns:repeat(2,1fr);}}
+.ob-provider{border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:16px 10px;text-align:center;cursor:pointer;transition:all 0.15s;}
+.ob-provider:hover{border-color:var(--brand-accent);background:var(--brand-light);}
+.ob-provider-logo{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 8px;font-size:15px;font-weight:700;}
+.ob-provider-name{font-size:12px;font-weight:600;color:var(--text-secondary);}
+.account-tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px;}
+.account-tab{display:flex;align-items:center;gap:8px;padding:8px 14px;border-radius:var(--radius-sm);border:1.5px solid var(--border);background:var(--surface);cursor:pointer;font-size:13px;font-weight:500;transition:all 0.15s;}
+.account-tab.active{border-color:var(--brand-primary);background:var(--brand-light);color:var(--brand-primary);}
+.schedule-block{border:2px dashed rgba(14,165,233,0.4);border-radius:var(--radius);padding:18px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px;background:rgba(14,165,233,0.03);margin-bottom:16px;}
+.schedule-block svg{width:38px;height:38px;color:var(--brand-accent);flex-shrink:0;}
+.schedule-text{flex:1;}
+.schedule-text strong{display:block;color:var(--text-primary);font-size:15px;margin-bottom:2px;}
+.schedule-text span{font-size:13px;color:var(--text-secondary);}
+.quick-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.quick-action{display:flex;flex-direction:column;align-items:center;gap:8px;padding:16px 12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);cursor:pointer;transition:all 0.15s;font-size:12px;font-weight:600;color:var(--text-secondary);text-align:center;}
+.quick-action:hover{border-color:var(--brand-accent);color:var(--brand-primary);background:var(--brand-light);}
+.quick-action svg{width:22px;height:22px;color:var(--brand-accent);}
+.success-screen{text-align:center;padding:40px 20px;}
+.success-icon{width:64px;height:64px;background:#d1fae5;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;}
+.success-icon svg{width:32px;height:32px;color:var(--brand-success);}
+.success-title{font-family:var(--font-display);font-size:26px;margin-bottom:8px;}
+.success-desc{font-size:14px;color:var(--text-secondary);margin-bottom:4px;}
+.success-sub{font-size:13px;color:var(--text-muted);margin-bottom:28px;}
+.portal-footer{background:var(--brand-primary);color:rgba(255,255,255,0.45);padding:22px 24px;font-size:11.5px;text-align:center;line-height:2;}
+.portal-footer a{color:rgba(255,255,255,0.55);text-decoration:none;}
+.hidden{display:none!important;}
+.mt-8{margin-top:8px;}.mt-12{margin-top:12px;}.mt-16{margin-top:16px;}
+.mb-16{margin-bottom:16px;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+.fade-in{animation:fadeUp 0.22s ease both;}
 </style>
 </head>
 <body>
-
 <div id="app"></div>
-
 <script>
-// ── Data ──
-const CSV_DATA = [
-  { ref: "1717", name: "James Wilson", balance: 950.00, client: "Zinc Training Account", product: "Credit Card", status: "active", dob: "1985-04-12", postcode: "B1 2AA" },
-  { ref: "2048", name: "Sarah Thompson", balance: 2340.50, client: "Demo Bank PLC", product: "Personal Loan", status: "active", dob: "1979-11-30", postcode: "M1 3AB" },
-  { ref: "3301", name: "Michael Chen", balance: 178.00, client: "Utility Co Ltd", product: "Gas & Electric", status: "active", dob: "1992-07-22", postcode: "EC1 4BC" },
+const I={
+  home:`<svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>`,
+  card:`<svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>`,
+  cal:`<svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>`,
+  plan:`<svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>`,
+  chart:`<svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>`,
+  tag:`<svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83 0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>`,
+  list:`<svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>`,
+  user:`<svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`,
+  bank:`<svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="22" x2="21" y2="22"/><line x1="6" y1="18" x2="6" y2="11"/><line x1="10" y1="18" x2="10" y2="11"/><line x1="14" y1="18" x2="14" y2="11"/><line x1="18" y1="18" x2="18" y2="11"/><polygon points="12 2 20 7 4 7"/></svg>`,
+  leaf:`<svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 8C8 10 5.9 16.17 3.82 19.34a1 1 0 001.64 1.14C7 19 7.5 18 9 17c1.94 1.52 4 2 6 2 4.42 0 8-3.58 8-8 0-4-.5-6-6-3z"/></svg>`,
+  logout:`<svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>`,
+  check:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`,
+  info:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>`,
+  warn:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>`,
+  up:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>`,
+  down:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>`,
+  menu:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>`,
+  x:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`,
+  shield:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>`,
+  clock:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>`,
+  trend:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>`,
+  repeat:`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg>`,
+};
+function ic(name,extra=''){return I[name].replace('class="nav-svg"',extra?`style="${extra}"`:'class="nav-svg"');}
+function cic(name){return I[name].replace('class="nav-svg"','class="card-title-svg"');}
+
+const DATA=[
+  {ref:"1717",name:"James Wilson",balance:950.00,client:"Zinc Training Account",product:"Credit Card",dob:"1985-04-12",postcode:"B1 2AA"},
+  {ref:"2048",name:"Sarah Thompson",balance:2340.50,client:"Demo Bank PLC",product:"Personal Loan",dob:"1979-11-30",postcode:"M1 3AB"},
+  {ref:"3301",name:"Michael Chen",balance:178.00,client:"Utility Co Ltd",product:"Gas & Electric",dob:"1992-07-22",postcode:"EC1 4BC"},
 ];
-
-const TRANSACTIONS = {
-  "1717": [
-    { type: "credit", desc: "Card payment", date: "30/05/2023", amount: 30.00 },
-    { type: "credit", desc: "Card payment", date: "30/05/2023", amount: 20.00 },
-    { type: "plan", desc: "Plan set up", date: "01/04/2023", amount: null },
-    { type: "debit", desc: "Interest applied", date: "01/03/2023", amount: 18.50 },
-  ],
-  "2048": [
-    { type: "credit", desc: "Direct debit", date: "01/06/2023", amount: 85.00 },
-    { type: "credit", desc: "Card payment", date: "01/05/2023", amount: 85.00 },
-  ],
-  "3301": [
-    { type: "credit", desc: "Online payment", date: "15/05/2023", amount: 50.00 },
-  ],
+const TXS={
+  "1717":[{type:"credit",desc:"Card payment",date:"30/05/2023",amount:30},{type:"credit",desc:"Card payment",date:"30/05/2023",amount:20},{type:"plan",desc:"Payment plan set up",date:"01/04/2023",amount:null},{type:"debit",desc:"Interest applied",date:"01/03/2023",amount:18.50}],
+  "2048":[{type:"credit",desc:"Direct debit",date:"01/06/2023",amount:85},{type:"credit",desc:"Card payment",date:"01/05/2023",amount:85}],
+  "3301":[{type:"credit",desc:"Online payment",date:"15/05/2023",amount:50}],
 };
 
-// ── State ──
-let state = {
-  screen: "login", // login | idv | register | home | pay | plan | ie | discount | breathing | transactions | details | openbankingintro | schedule
-  loginStep: "ref", // ref | idv | register
-  user: null,
-  activeAccount: null,
-  payMethod: "card",
-  payAmount: "",
-  scheduleDate: "",
-  planAmount: "",
-  planFreq: "monthly",
-  planDuration: "",
-  ieData: {},
-  ieSurplus: null,
-  breathingActive: false,
-  payComplete: false,
-  planComplete: false,
-  ieComplete: false,
-  loginRef: "",
-  loginDob: "",
-  loginPostcode: "",
-  loginUsername: "",
-  loginPassword: "",
-};
+let S={screen:"login",step:"ref",user:null,acct:null,payMethod:"card",payAmt:"",payDone:false,schedDate:"",schedAmt:"",schedDone:false,planAmt:"",planFreq:"monthly",planDone:false,ie:{},ieDone:false,ieSurplus:null,breathing:false,sidebarOpen:false,loginRef:"",loginDob:"",loginPc:""};
+const set=p=>{Object.assign(S,p);render();};
+const go=s=>set({screen:s,payDone:false,planDone:false,schedDone:false,ieDone:false,sidebarOpen:false});
+const logout=()=>set({screen:"login",step:"ref",user:null,acct:null,loginRef:"",loginDob:"",loginPc:""});
 
-function setState(patch) {
-  Object.assign(state, patch);
-  render();
+function render(){document.getElementById("app").innerHTML=S.screen==="login"?rAuth():rPortal();bindEvents();}
+
+function stepBar(cur){
+  const steps=["ref","idv","register"];
+  const si=steps.indexOf(cur);
+  return steps.map((_,i)=>`<div class="auth-step ${i<si?'done':i===si?'active':''}"></div>`).join('');
 }
 
-// ── Routing helpers ──
-function go(screen) { setState({ screen, payComplete: false, planComplete: false, ieComplete: false }); }
-function logout() { setState({ screen: "login", loginStep: "ref", user: null, activeAccount: null, loginRef: "", loginDob: "", loginPostcode: "" }); }
+function rAuth(){
+  if(S.step==="ref") return `<div class="auth-wrap"><div class="auth-card fade-in">
+    <div class="auth-logo">My<span>Account</span></div>
+    <div class="auth-tagline">Manage your account securely online</div>
+    <div class="auth-steps">${stepBar("ref")}</div>
+    <div class="auth-title">Find your account</div>
+    <div class="auth-subtitle">Enter the reference number from any letter we've sent you.</div>
+    <div class="form-group"><label class="form-label">Reference number</label>
+    <input class="form-input" id="inp-ref" type="text" placeholder="e.g. 1717" value="${S.loginRef}" autocomplete="off" style="font-size:20px;font-weight:700;letter-spacing:2px;">
+    <p class="form-hint">Can't find it? Call us on <strong>0141 301 9055</strong></p></div>
+    <div id="ref-err" class="alert alert-danger hidden">${I.warn}<span>We couldn't find that reference. Please check and try again.</span></div>
+    <button class="btn btn-primary btn-block btn-lg" onclick="doRef()">Continue →</button>
+    <div class="auth-help">Hearing/speech impairment? Use <strong>Relay UK</strong> — <a href="https://relayuk.bt.com" target="_blank">relayuk.bt.com</a></div>
+  </div></div>`;
 
-// ── Render engine ──
-function render() {
-  const app = document.getElementById("app");
-  if (state.screen === "login") { app.innerHTML = renderLogin(); }
-  else { app.innerHTML = renderPortal(); }
-  bindEvents();
+  if(S.step==="idv") return `<div class="auth-wrap"><div class="auth-card fade-in">
+    <div class="auth-logo">My<span>Account</span></div>
+    <div class="auth-tagline">Step 2 of 3 — Verify your identity</div>
+    <div class="auth-steps">${stepBar("idv")}</div>
+    <div class="auth-title">Confirm your details</div>
+    <div class="auth-subtitle">We need to verify who you are before granting access to account <strong>${S.loginRef}</strong>.</div>
+    <div class="form-group"><label class="form-label">Date of birth</label><input class="form-input" id="inp-dob" type="date" value="${S.loginDob}"></div>
+    <div class="form-group"><label class="form-label">Postcode</label><input class="form-input" id="inp-pc" type="text" placeholder="e.g. B1 2AA" value="${S.loginPc}" style="text-transform:uppercase;"><p class="form-hint">Enter the postcode we have on file for you.</p></div>
+    <div id="idv-err" class="alert alert-danger hidden">${I.warn}<span>Details don't match our records. Please try again or call us.</span></div>
+    <div style="display:flex;gap:10px;margin-top:4px;"><button class="btn btn-ghost" onclick="set({step:'ref'})">← Back</button><button class="btn btn-primary" style="flex:1;" onclick="doIDV()">Verify identity →</button></div>
+  </div></div>`;
+
+  return `<div class="auth-wrap"><div class="auth-card fade-in">
+    <div class="auth-logo">My<span>Account</span></div>
+    <div class="auth-tagline">Step 3 of 3 — Create your login</div>
+    <div class="auth-steps">${stepBar("register")}</div>
+    <div class="auth-title">Set your password</div>
+    <div class="auth-subtitle">Choose an email address and password. You'll use these to log in from now on.</div>
+    <div class="form-group"><label class="form-label">Email address</label><input class="form-input" id="inp-email" type="email" placeholder="your@email.com"></div>
+    <div class="form-group"><label class="form-label">Password</label><input class="form-input" id="inp-pass" type="password" placeholder="Minimum 8 characters"><p class="form-hint">Use at least 8 characters including a number.</p></div>
+    <div class="form-group"><label class="form-label">Confirm password</label><input class="form-input" id="inp-pass2" type="password" placeholder="Repeat your password"></div>
+    <div id="reg-err" class="alert alert-danger hidden">${I.warn}<span id="reg-err-txt"></span></div>
+    <button class="btn btn-primary btn-block btn-lg mt-8" onclick="doReg()">Create account →</button>
+    <p style="font-size:12px;color:var(--text-muted);text-align:center;margin-top:14px;">By creating an account you agree to our <a href="#" style="color:var(--brand-accent);">Terms of Use</a> and <a href="#" style="color:var(--brand-accent);">Privacy Policy</a>.</p>
+  </div></div>`;
 }
 
-// ── Auth screens ──
-function renderLogin() {
-  if (state.loginStep === "ref") return renderRefStep();
-  if (state.loginStep === "idv") return renderIDVStep();
-  if (state.loginStep === "register") return renderRegisterStep();
-}
-
-function renderRefStep() {
-  return `
-  <div class="auth-wrap">
-    <div class="auth-card fade-in">
-      <div class="auth-logo">My<span>Account</span></div>
-      <p class="auth-subtitle">Manage your account securely online</p>
-      <h2 class="auth-title">Get started</h2>
-      <p style="font-size:14px;color:var(--text-secondary);margin-bottom:24px;">Enter your Zinc reference number to find your account.</p>
-      <div class="form-group">
-        <label class="form-label">Your reference number</label>
-        <input class="form-input" id="inp-ref" type="text" placeholder="e.g. 1717" value="${state.loginRef}">
-        <p class="form-hint">This can be found on any letter we've sent you.</p>
-      </div>
-      <div id="ref-error" class="alert alert-danger hidden">
-        <span>⚠️</span><span>We couldn't find that reference number. Please check and try again.</span>
-      </div>
-      <button class="btn btn-primary btn-block btn-lg mt-8" onclick="submitRef()">Continue →</button>
-      <div style="margin-top:20px;padding-top:20px;border-top:1px solid var(--border);font-size:12px;color:var(--text-muted);line-height:1.8;text-align:center;">
-        If you have a hearing or speech impairment you can use Relay UK.<br>
-        Need help? Call us on <strong>0141 301 9055</strong>, Mon–Fri 9:00–18:00.
-      </div>
-    </div>
-  </div>`;
-}
-
-function renderIDVStep() {
-  const acct = CSV_DATA.find(a => a.ref === state.loginRef);
-  return `
-  <div class="auth-wrap">
-    <div class="auth-card fade-in">
-      <div class="auth-logo">My<span>Account</span></div>
-      <p class="auth-subtitle">Identity verification</p>
-      <h2 class="auth-title">Verify your identity</h2>
-      <p style="font-size:14px;color:var(--text-secondary);margin-bottom:24px;">We need to confirm who you are before granting access to account <strong>${state.loginRef}</strong>.</p>
-      <div class="form-group">
-        <label class="form-label">Date of birth</label>
-        <input class="form-input" id="inp-dob" type="date" value="${state.loginDob}">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Postcode</label>
-        <input class="form-input" id="inp-pc" type="text" placeholder="e.g. B1 2AA" value="${state.loginPostcode}" style="text-transform:uppercase;">
-      </div>
-      <div id="idv-error" class="alert alert-danger hidden">
-        <span>⚠️</span><span>The details you entered don't match our records. Please try again.</span>
-      </div>
-      <div style="display:flex;gap:10px;margin-top:8px;">
-        <button class="btn btn-ghost" onclick="setState({loginStep:'ref'})">← Back</button>
-        <button class="btn btn-primary" style="flex:1;" onclick="submitIDV()">Verify identity →</button>
-      </div>
-    </div>
-  </div>`;
-}
-
-function renderRegisterStep() {
-  return `
-  <div class="auth-wrap">
-    <div class="auth-card fade-in">
-      <div class="auth-logo">My<span>Account</span></div>
-      <p class="auth-subtitle">Create your account</p>
-      <h2 class="auth-title">Choose a password</h2>
-      <p style="font-size:14px;color:var(--text-secondary);margin-bottom:24px;">Almost there. Set up your login credentials and confirm your email address.</p>
-      <div class="form-group">
-        <label class="form-label">Email address</label>
-        <input class="form-input" id="inp-email" type="email" placeholder="your@email.com">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Choose a password</label>
-        <input class="form-input" id="inp-pass" type="password" placeholder="Minimum 8 characters">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Confirm password</label>
-        <input class="form-input" id="inp-pass2" type="password" placeholder="Repeat password">
-      </div>
-      <div id="reg-error" class="alert alert-danger hidden"></div>
-      <button class="btn btn-primary btn-block btn-lg mt-8" onclick="submitRegister()">Create account →</button>
-    </div>
-  </div>`;
-}
-
-// ── Portal shell ──
-function renderPortal() {
-  const acct = state.activeAccount;
-  const txns = TRANSACTIONS[acct.ref] || [];
-  const paidAmount = txns.filter(t => t.type === "credit").reduce((s, t) => s + t.amount, 0);
-
-  const navItems = [
-    { id: "home", icon: "🏠", label: "Home" },
-    { id: "pay", icon: "💳", label: "Make a payment" },
-    { id: "schedule", icon: "📅", label: "Schedule payment" },
-    { id: "plan", icon: "📋", label: "Payment plan" },
-    { id: "ie", icon: "📊", label: "Budget tool" },
-    { id: "discount", icon: "🏷️", label: "Discount offers" },
-    { id: "transactions", icon: "🔄", label: "Transactions" },
-    { id: "details", icon: "👤", label: "My details" },
-    { id: "openbankingintro", icon: "🏦", label: "Open banking" },
-    { id: "breathing", icon: "🌿", label: "Breathing space" },
+function rPortal(){
+  const a=S.acct;
+  const nav=[
+    {id:"home",k:"home",l:"Home"},{id:"pay",k:"card",l:"Make a payment"},{id:"schedule",k:"cal",l:"Schedule payment"},
+    {id:"plan",k:"plan",l:"Payment plan"},{id:"ie",k:"chart",l:"Budget tool"},{id:"discount",k:"tag",l:"Discount offers"},
+    {id:"transactions",k:"list",l:"Transactions"},{id:"details",k:"user",l:"My details"},
+    {id:"openbankingintro",k:"bank",l:"Open banking"},{id:"breathing",k:"leaf",l:"Breathing space"},
   ];
-
-  const multiAccount = state.user.accounts.length > 1;
-
-  return `
-  <div class="app">
-    <div class="access-bar">
-      <span>👁️ <a href="#">Accessibility</a></span>
-      <span>🔤 <a href="#">Text size</a></span>
-      <span>Relay UK available for hearing/speech impairment — <a href="https://relayuk.bt.com" target="_blank">relayuk.bt.com</a></span>
+  const multi=S.user.accounts.length>1;
+  return `<div class="app">
+  <div class="access-bar">
+    <span><a href="#">Accessibility</a></span>
+    <span>Relay UK available — <a href="https://relayuk.bt.com" target="_blank">relayuk.bt.com</a></span>
+  </div>
+  <header class="topbar">
+    <div class="topbar-logo">
+      <button class="mobile-menu-btn" onclick="set({sidebarOpen:!S.sidebarOpen})">${S.sidebarOpen?I.x:I.menu}</button>
+      <div class="topbar-logo-text">My<span>Account</span></div>
+      <div class="topbar-logo-pill">Zinc Group</div>
     </div>
-    <header class="topbar">
-      <div class="topbar-logo">My<span>Account</span></div>
-      <div class="topbar-right">
-        <span class="topbar-user">Welcome, ${state.user.name}</span>
-        <div class="topbar-avatar" title="Account menu">${state.user.name.charAt(0)}</div>
-        <button class="btn btn-ghost btn-sm" onclick="logout()" style="color:rgba(255,255,255,0.7);border-color:rgba(255,255,255,0.2);">Logout</button>
+    <div class="topbar-right">
+      <span class="topbar-user">Welcome, ${S.user.name.split(' ')[0]}</span>
+      <div class="topbar-avatar">${S.user.name.charAt(0)}</div>
+      <button class="topbar-logout" onclick="logout()">${I.logout.replace('class="nav-svg"','style="width:15px;height:15px;"')} Logout</button>
+    </div>
+  </header>
+  <div class="sidebar-overlay ${S.sidebarOpen?'open':''}" onclick="set({sidebarOpen:false})"></div>
+  <div class="main-layout">
+    <aside class="sidebar ${S.sidebarOpen?'open':''}">
+      ${multi?`<div><div class="nav-section-label">Your accounts</div><div class="account-tabs">${S.user.accounts.map(ac=>`<div class="account-tab ${ac.ref===a.ref?'active':''}" onclick="switchAcct('${ac.ref}')"><span style="font-size:12px;">${ac.client}<br><span style="color:var(--text-muted);font-weight:400;">Ref: ${ac.ref}</span></span></div>`).join('')}</div></div>`:''}
+      <div class="sidebar-account-card">
+        <div class="sac-label">Balance outstanding</div>
+        <div class="sac-balance">£${a.balance.toFixed(2)}</div>
+        <div class="sac-client">${a.client}</div>
+        <div class="sac-ref">Ref: ${a.ref} · ${a.product}</div>
+        <div class="sac-divider"></div>
+        <button class="sac-pay-btn" onclick="go('pay')">${I.card.replace('class="nav-svg"','style="width:16px;height:16px;"')} Pay now</button>
       </div>
-    </header>
-
-    <div class="main-layout">
-      <aside class="sidebar">
-        ${multiAccount ? `
-        <div style="margin-bottom:12px;">
-          <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.6px;color:var(--text-muted);font-weight:600;margin-bottom:8px;">Your accounts</div>
-          ${state.user.accounts.map(a => `
-            <div class="account-tab ${a.ref === acct.ref ? 'active' : ''}" onclick="switchAccount('${a.ref}')">
-              <span>${a.ref === acct.ref ? '✓' : '○'}</span>
-              <span style="font-size:12px;">${a.client}<br><span style="color:var(--text-muted);font-weight:400;">Ref: ${a.ref}</span></span>
-            </div>
-          `).join('')}
-        </div>` : ''}
-
-        <div class="sidebar-account-card">
-          <div class="label">Current balance</div>
-          <div class="balance">£${acct.balance.toFixed(2)}</div>
-          <div class="client-name">${acct.client}</div>
-          <div class="ref">Ref: ${acct.ref} · ${acct.product}</div>
-        </div>
-
+      <div>
+        <div class="nav-section-label">Menu</div>
         <nav class="nav-menu">
-          ${navItems.map(n => `
-            <button class="nav-item ${state.screen === n.id ? 'active' : ''}" onclick="go('${n.id}')">
-              <span class="nav-icon">${n.icon}</span>
-              <span>${n.label}</span>
-            </button>
-          `).join('')}
-          <button class="nav-item" onclick="logout()" style="margin-top:8px;color:var(--brand-danger);">
-            <span class="nav-icon">🚪</span>
-            <span>Logout</span>
-          </button>
+          ${nav.map(n=>`<button class="nav-item ${S.screen===n.id?'active':''}" onclick="go('${n.id}')">${I[n.k]} <span>${n.l}</span></button>`).join('')}
+          <button class="nav-item danger" onclick="logout()" style="margin-top:8px;">${I.logout} <span>Log out</span></button>
         </nav>
-      </aside>
-
-      <main class="content fade-in">
-        ${renderScreen()}
-      </main>
-    </div>
-
-    <footer class="portal-footer">
-      The Zinc Group Limited is a Registered Company in England and Wales, Registration Number: 9677189.<br>
-      Complete Credit Consultancy Limited (Part of the Zinc Group Limited) is Authorised and Regulated by the Financial Conduct Authority for the recovery of debts due under a credit agreement.<br>
-      The Zinc Group · Bridgeway House, Bridgeway, Stratford Upon Avon CV37 6YX · <a href="#">Privacy Policy</a> · <a href="#">Terms of Use</a>
-    </footer>
-  </div>`;
+      </div>
+    </aside>
+    <main class="content fade-in">${rScreen()}</main>
+  </div>
+  <footer class="portal-footer">
+    The Zinc Group Limited is a Registered Company in England and Wales, Registration Number: 9677189.<br>
+    Complete Credit Consultancy Limited (Part of the Zinc Group Limited) is Authorised and Regulated by the Financial Conduct Authority for the recovery of debts due under a credit agreement.<br>
+    The Zinc Group · Bridgeway House, Bridgeway, Stratford Upon Avon CV37 6YX &nbsp;·&nbsp; <a href="#">Privacy Policy</a> &nbsp;·&nbsp; <a href="#">Terms of Use</a> &nbsp;·&nbsp; <a href="#">Cookie Policy</a>
+  </footer>
+</div>`;
 }
 
-function renderScreen() {
-  switch (state.screen) {
-    case "home": return renderHome();
-    case "pay": return renderPay();
-    case "schedule": return renderSchedule();
-    case "plan": return renderPlan();
-    case "ie": return renderIE();
-    case "discount": return renderDiscount();
-    case "transactions": return renderTransactions();
-    case "details": return renderDetails();
-    case "openbankingintro": return renderOpenBanking();
-    case "breathing": return renderBreathing();
-    default: return renderHome();
+function rScreen(){
+  switch(S.screen){
+    case"home":return rHome();case"pay":return rPay();case"schedule":return rSchedule();
+    case"plan":return rPlan();case"ie":return rIE();case"discount":return rDiscount();
+    case"transactions":return rTx();case"details":return rDetails();
+    case"openbankingintro":return rOB();case"breathing":return rBreathing();
+    default:return rHome();
   }
 }
 
-// ── Screens ──
-function renderHome() {
-  const acct = state.activeAccount;
-  const txns = TRANSACTIONS[acct.ref] || [];
-  const paidAmount = txns.filter(t => t.type === "credit").reduce((s, t) => s + (t.amount || 0), 0);
-  const origBalance = acct.balance + paidAmount;
-  const progress = origBalance > 0 ? Math.min(100, Math.round((paidAmount / origBalance) * 100)) : 0;
-
+function rHome(){
+  const a=S.acct,txs=TXS[a.ref]||[];
+  const paid=txs.filter(t=>t.type==="credit").reduce((s,t)=>s+(t.amount||0),0);
+  const orig=a.balance+paid,pct=orig>0?Math.min(100,Math.round((paid/orig)*100)):0;
   return `
-  <div class="page-header">
-    <div class="page-title">Welcome back, ${state.user.name.split(' ')[0]}</div>
-    <div class="page-subtitle">This is your space to manage your account anytime.</div>
-  </div>
-
-  <div class="alert alert-info">
-    <span>💳</span>
-    <div>You can now pay using <strong>Apple Pay</strong> and <strong>Google Pay</strong>. <a href="#" onclick="go('pay');return false;" style="color:var(--brand-primary);font-weight:600;">Make a payment</a></div>
-  </div>
-
+  <div class="page-header"><div class="page-title">Welcome back, ${S.user.name.split(' ')[0]}</div><div class="page-subtitle">This is your space to manage your account anytime.</div></div>
+  <div class="alert alert-info">${I.info}<div>You can now pay using <strong>Apple Pay</strong> and <strong>Google Pay</strong>. <a href="#" onclick="go('pay');return false;" style="color:var(--brand-primary);font-weight:600;">Make a payment today</a></div></div>
   <div class="stat-grid">
-    <div class="stat-card accent">
-      <div class="stat-label">Balance outstanding</div>
-      <div class="stat-value">£${acct.balance.toFixed(2)}</div>
-      <div class="stat-sub">Ref: ${acct.ref}</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Total paid</div>
-      <div class="stat-value">£${paidAmount.toFixed(2)}</div>
-      <div class="stat-sub">All time</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Client</div>
-      <div class="stat-value" style="font-size:18px;margin-top:4px;">${acct.client}</div>
-      <div class="stat-sub">${acct.product}</div>
-    </div>
+    <div class="stat-card accent"><div class="stat-label">Balance outstanding</div><div class="stat-value">£${a.balance.toFixed(2)}</div><div class="stat-sub">Ref: ${a.ref}</div></div>
+    <div class="stat-card"><div class="stat-label">Total paid</div><div class="stat-value">£${paid.toFixed(2)}</div><div class="stat-sub">All payments</div></div>
+    <div class="stat-card"><div class="stat-label">Creditor</div><div class="stat-value" style="font-size:16px;margin-top:6px;line-height:1.3;">${a.client}</div><div class="stat-sub">${a.product}</div></div>
   </div>
-
   <div class="card">
-    <div class="card-title"><span class="icon">📈</span> Repayment progress</div>
-    <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--text-secondary);margin-bottom:6px;">
-      <span>£${paidAmount.toFixed(2)} paid</span>
-      <span>${progress}%</span>
-    </div>
-    <div class="progress-wrap"><div class="progress-fill" style="width:${progress}%"></div></div>
-    <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">£${acct.balance.toFixed(2)} remaining</div>
+    <div class="card-header"><div class="card-title">${cic('trend')} Repayment progress</div><span class="badge badge-blue">${pct}% paid</span></div>
+    <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--text-secondary);margin-bottom:4px;"><span>£${paid.toFixed(2)} paid</span><span>£${a.balance.toFixed(2)} remaining</span></div>
+    <div class="progress-wrap"><div class="progress-fill" style="width:${pct}%"></div></div>
   </div>
-
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
-    <button class="btn btn-primary btn-lg btn-block" onclick="go('pay')">💳 Make a payment</button>
-    <button class="btn btn-outline btn-lg btn-block" onclick="go('plan')">📋 Set up a plan</button>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+    <button class="btn btn-primary btn-lg btn-block" onclick="go('pay')">${I.card.replace('class="nav-svg"','style="width:16px;height:16px;"')} Make a payment</button>
+    <button class="btn btn-outline btn-lg btn-block" onclick="go('plan')">${I.plan.replace('class="nav-svg"','style="width:16px;height:16px;"')} Set up a plan</button>
   </div>
-
-  <div class="schedule-block mb-16" style="margin-bottom:16px;">
-    <div class="schedule-date-icon">📅</div>
-    <div class="schedule-text">
-      <strong>Can't pay today?</strong>
-      You can schedule your payment for a later date. It takes less than 2 minutes.
-    </div>
+  <div class="schedule-block">
+    ${I.cal.replace('class="nav-svg"','style="width:38px;height:38px;color:var(--brand-accent);flex-shrink:0;"')}
+    <div class="schedule-text"><strong>Can't pay today?</strong><span>Schedule a payment for a date that suits you — takes less than 2 minutes.</span></div>
     <button class="btn btn-accent btn-sm" onclick="go('schedule')">Schedule →</button>
   </div>
-
   <div class="card">
-    <div class="card-title"><span class="icon">🔄</span> Latest transactions
-      <a href="#" onclick="go('transactions');return false;" style="margin-left:auto;font-size:13px;color:var(--brand-accent);font-weight:500;">View all</a>
-    </div>
-    <div class="tx-list">
-      ${txns.slice(0,3).map(t => `
-        <div class="tx-item">
-          <div class="tx-left">
-            <div class="tx-icon ${t.type}">${t.type === 'credit' ? '↑' : t.type === 'debit' ? '↓' : '📋'}</div>
-            <div>
-              <div class="tx-desc">${t.desc}</div>
-              <div class="tx-date">${t.date}</div>
-            </div>
-          </div>
-          ${t.amount ? `<div class="tx-amount ${t.type}">${t.type === 'credit' ? '+' : '-'}£${t.amount.toFixed(2)}</div>` : '<div class="badge badge-blue">Plan</div>'}
+    <div class="card-header"><div class="card-title">${cic('repeat')} Latest transactions</div><a class="card-link" onclick="go('transactions')">View all</a></div>
+    ${txs.length===0?`<div style="text-align:center;padding:20px;color:var(--text-muted);font-size:14px;">No transactions yet.</div>`:`
+    <div class="tx-list">${txs.slice(0,3).map(t=>`
+      <div class="tx-item">
+        <div class="tx-left">
+          <div class="tx-icon ${t.type}">${t.type==="credit"?I.up:t.type==="debit"?I.down:I.plan.replace('class="nav-svg"','')}</div>
+          <div><div class="tx-desc">${t.desc}</div><div class="tx-date">${t.date}</div></div>
         </div>
-      `).join('')}
-    </div>
+        ${t.amount?`<div class="tx-amount ${t.type}">${t.type==="credit"?"+":"-"}£${t.amount.toFixed(2)}</div>`:`<div class="badge badge-blue">Plan</div>`}
+      </div>`).join('')}</div>`}
   </div>
-
-  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;">
-    <button class="btn btn-ghost btn-block" onclick="go('ie')" style="flex-direction:column;padding:16px;gap:6px;height:auto;">
-      <span style="font-size:24px;">📊</span>
-      <span style="font-size:12px;">Budget tool</span>
-    </button>
-    <button class="btn btn-ghost btn-block" onclick="go('discount')" style="flex-direction:column;padding:16px;gap:6px;height:auto;">
-      <span style="font-size:24px;">🏷️</span>
-      <span style="font-size:12px;">Discount offers</span>
-    </button>
-    <button class="btn btn-ghost btn-block" onclick="go('breathing')" style="flex-direction:column;padding:16px;gap:6px;height:auto;">
-      <span style="font-size:24px;">🌿</span>
-      <span style="font-size:12px;">Breathing space</span>
-    </button>
+  <div class="quick-actions">
+    <div class="quick-action" onclick="go('ie')">${I.chart.replace('class="nav-svg"','style="width:22px;height:22px;color:var(--brand-accent);"')}<span>Budget tool</span></div>
+    <div class="quick-action" onclick="go('discount')">${I.tag.replace('class="nav-svg"','style="width:22px;height:22px;color:var(--brand-accent);"')}<span>Discount offers</span></div>
+    <div class="quick-action" onclick="go('breathing')">${I.leaf.replace('class="nav-svg"','style="width:22px;height:22px;color:var(--brand-accent);"')}<span>Breathing space</span></div>
   </div>`;
 }
 
-function renderPay() {
-  if (state.payComplete) return `
-    <div class="text-center" style="padding:40px 20px;">
-      <div style="font-size:64px;margin-bottom:16px;">✅</div>
-      <h2 style="font-family:var(--font-display);font-size:28px;margin-bottom:8px;">Payment received</h2>
-      <p style="color:var(--text-secondary);margin-bottom:8px;">£${parseFloat(state.payAmount).toFixed(2)} has been applied to your account.</p>
-      <p style="font-size:13px;color:var(--text-muted);margin-bottom:28px;">A confirmation has been sent to your email address. Your new balance is <strong>£${(state.activeAccount.balance - parseFloat(state.payAmount)).toFixed(2)}</strong>.</p>
-      <button class="btn btn-primary btn-lg" onclick="go('home')">Back to home</button>
-    </div>`;
-
+function rPay(){
+  if(S.payDone) return `<div class="success-screen"><div class="success-icon">${I.check}</div><div class="success-title">Payment received</div><div class="success-desc">£${parseFloat(S.payAmt).toFixed(2)} has been applied to your account.</div><div class="success-sub">Confirmation sent to your email. New balance: <strong>£${Math.max(0,S.acct.balance).toFixed(2)}</strong></div><button class="btn btn-primary btn-lg" onclick="go('home')">Back to home</button></div>`;
+  const amt=parseFloat(S.payAmt)||0;
   return `
-  <div class="page-header">
-    <div class="page-title">Make a payment</div>
-    <div class="page-subtitle">Balance outstanding: <strong>£${state.activeAccount.balance.toFixed(2)}</strong></div>
-  </div>
-
+  <div class="page-header"><div class="page-title">Make a payment</div><div class="page-subtitle">Current balance: <strong>£${S.acct.balance.toFixed(2)}</strong></div></div>
   <div class="card">
-    <div class="card-title"><span class="icon">💰</span> Payment amount</div>
-    <div class="form-group">
-      <label class="form-label">Amount (£)</label>
-      <input class="form-input" id="inp-payamt" type="number" min="1" step="0.01" placeholder="0.00" value="${state.payAmount}" style="font-size:22px;font-weight:600;">
-      <p class="form-hint">Minimum payment: £5.00 · Full balance: £${state.activeAccount.balance.toFixed(2)}</p>
-    </div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap;">
-      ${[5,10,25,50].map(a => `<button class="btn btn-ghost btn-sm" onclick="setState({payAmount:'${a}'})">£${a}</button>`).join('')}
-      <button class="btn btn-ghost btn-sm" onclick="setState({payAmount:'${state.activeAccount.balance.toFixed(2)}'})">Full balance</button>
-    </div>
+    <div class="card-title">${cic('card')} Payment amount</div>
+    <div class="form-group"><label class="form-label">Amount (£)</label>
+    <input class="form-input" id="inp-payamt" type="number" min="1" step="0.01" placeholder="0.00" value="${S.payAmt}" style="font-size:22px;font-weight:700;" oninput="S.payAmt=this.value;render();">
+    <p class="form-hint">Minimum: £5.00 · Full balance: £${S.acct.balance.toFixed(2)}</p></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">${[5,10,25,50].map(n=>`<button class="btn btn-ghost btn-sm" onclick="set({payAmt:'${n}'})">£${n}</button>`).join('')}<button class="btn btn-ghost btn-sm" onclick="set({payAmt:'${S.acct.balance.toFixed(2)}'})">Full balance</button></div>
   </div>
-
   <div class="card">
-    <div class="card-title"><span class="icon">💳</span> Payment method</div>
+    <div class="card-title">${cic('shield')} Payment method</div>
     <div class="pay-methods">
-      <div class="pay-pill ${state.payMethod === 'card' ? 'selected' : ''}" onclick="setState({payMethod:'card'})">
-        <span class="pill-icon">💳</span> Debit / Credit card
-      </div>
-      <div class="pay-pill ${state.payMethod === 'apple' ? 'selected' : ''}" onclick="setState({payMethod:'apple'})">
-        <span class="pill-icon"> </span> Apple Pay
-      </div>
-      <div class="pay-pill ${state.payMethod === 'google' ? 'selected' : ''}" onclick="setState({payMethod:'google'})">
-        <span class="pill-icon">G</span> Google Pay
-      </div>
-      <div class="pay-pill ${state.payMethod === 'openbanking' ? 'selected' : ''}" onclick="setState({payMethod:'openbanking'})">
-        <span class="pill-icon">🏦</span> Open banking
-      </div>
+      ${[{id:"card",l:"Debit / Credit card"},{id:"apple",l:"Apple Pay"},{id:"google",l:"Google Pay"},{id:"openbanking",l:"Open banking"}].map(m=>`<div class="pay-pill ${S.payMethod===m.id?'selected':''}" onclick="set({payMethod:'${m.id}'})">${I.card.replace('class="nav-svg"','style="width:18px;height:18px;"')} ${m.l}</div>`).join('')}
     </div>
-
-    ${state.payMethod === 'card' ? `
-    <div class="form-row">
-      <div class="form-group">
-        <label class="form-label">Card number</label>
-        <input class="form-input" type="text" placeholder="1234 5678 9012 3456" maxlength="19">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Name on card</label>
-        <input class="form-input" type="text" placeholder="As shown on card">
-      </div>
-    </div>
-    <div class="form-row">
-      <div class="form-group">
-        <label class="form-label">Expiry</label>
-        <input class="form-input" type="text" placeholder="MM / YY" maxlength="7">
-      </div>
-      <div class="form-group">
-        <label class="form-label">CVV</label>
-        <input class="form-input" type="text" placeholder="3 digits" maxlength="4">
-      </div>
-    </div>` : `
-    <div class="alert alert-info">
-      <span>ℹ️</span>
-      <span>You'll be redirected to complete your ${state.payMethod === 'openbanking' ? 'open banking' : state.payMethod} payment securely.</span>
-    </div>`}
+    ${S.payMethod==="card"?`
+    <div class="form-row"><div class="form-group"><label class="form-label">Card number</label><input class="form-input" type="text" placeholder="1234 5678 9012 3456" maxlength="19"></div><div class="form-group"><label class="form-label">Name on card</label><input class="form-input" type="text" placeholder="As shown on card"></div></div>
+    <div class="form-row"><div class="form-group"><label class="form-label">Expiry</label><input class="form-input" type="text" placeholder="MM / YY" maxlength="7"></div><div class="form-group"><label class="form-label">CVV</label><input class="form-input" type="text" placeholder="3 digits" maxlength="4"></div></div>`:`
+    <div class="alert alert-info">${I.info}<span>You'll be redirected to complete your ${S.payMethod==="openbanking"?"open banking":S.payMethod} payment securely.</span></div>`}
   </div>
-
   <div class="card">
     <div class="card-title">Payment summary</div>
-    <div class="summary-row"><span class="summary-key">Amount</span><span>£${parseFloat(state.payAmount || 0).toFixed(2)}</span></div>
-    <div class="summary-row"><span class="summary-key">Reference</span><span>${state.activeAccount.ref}</span></div>
-    <div class="summary-row"><span class="summary-key">New balance</span><span>£${Math.max(0, state.activeAccount.balance - parseFloat(state.payAmount || 0)).toFixed(2)}</span></div>
+    <div class="summary-row"><span class="summary-key">Amount</span><span>£${amt.toFixed(2)}</span></div>
+    <div class="summary-row"><span class="summary-key">Reference</span><span>${S.acct.ref}</span></div>
+    <div class="summary-row"><span class="summary-key">New balance after payment</span><span>£${Math.max(0,S.acct.balance-amt).toFixed(2)}</span></div>
   </div>
-
-  <button class="btn btn-primary btn-lg btn-block" onclick="submitPayment()" ${!state.payAmount ? 'disabled style="opacity:0.5;cursor:not-allowed;"' : ''}>
-    Pay £${parseFloat(state.payAmount || 0).toFixed(2)} →
-  </button>
-  <p style="font-size:12px;color:var(--text-muted);text-align:center;margin-top:10px;">🔒 Payments are processed securely. We do not store card details.</p>`;
+  <button class="btn btn-primary btn-lg btn-block" onclick="doPay()" ${!S.payAmt||parseFloat(S.payAmt)<5?'disabled':''}>Pay £${amt.toFixed(2)} →</button>
+  <p style="font-size:12px;color:var(--text-muted);text-align:center;margin-top:10px;">${I.shield.replace('class="nav-svg"','style="width:13px;height:13px;display:inline;vertical-align:middle;margin-right:3px;"')} Payments are processed securely. Card details are never stored.</p>`;
 }
 
-function renderSchedule() {
-  if (state.scheduleComplete) return `
-    <div class="text-center" style="padding:40px 20px;">
-      <div style="font-size:64px;margin-bottom:16px;">📅</div>
-      <h2 style="font-family:var(--font-display);font-size:28px;margin-bottom:8px;">Payment scheduled</h2>
-      <p style="color:var(--text-secondary);margin-bottom:28px;">Your payment of <strong>£${parseFloat(state.scheduleAmt).toFixed(2)}</strong> is scheduled for <strong>${state.scheduleDate}</strong>.</p>
-      <button class="btn btn-primary btn-lg" onclick="setState({scheduleComplete:false});go('home')">Back to home</button>
-    </div>`;
-
+function rSchedule(){
+  if(S.schedDone) return `<div class="success-screen"><div class="success-icon" style="background:var(--brand-light);">${I.cal.replace('class="nav-svg"','style="width:32px;height:32px;color:var(--brand-primary);"')}</div><div class="success-title">Payment scheduled</div><div class="success-desc">£${parseFloat(S.schedAmt).toFixed(2)} scheduled for <strong>${S.schedDate}</strong>.</div><div class="success-sub">We'll send a reminder before the payment is taken.</div><button class="btn btn-primary btn-lg" onclick="go('home')">Back to home</button></div>`;
   return `
-  <div class="page-header">
-    <div class="page-title">Schedule a payment</div>
-    <div class="page-subtitle">Can't pay today? Schedule for a date that suits you.</div>
-  </div>
+  <div class="page-header"><div class="page-title">Schedule a payment</div><div class="page-subtitle">Choose a future date to make your payment.</div></div>
   <div class="card">
-    <div class="card-title"><span class="icon">📅</span> Choose a date and amount</div>
+    <div class="card-title">${cic('cal')} Payment details</div>
     <div class="form-row">
-      <div class="form-group">
-        <label class="form-label">Payment date</label>
-        <input class="form-input" id="inp-sched-date" type="date" value="${state.scheduleDate}" min="${new Date().toISOString().split('T')[0]}">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Amount (£)</label>
-        <input class="form-input" id="inp-sched-amt" type="number" min="1" step="0.01" placeholder="0.00" value="${state.scheduleAmt || ''}">
-      </div>
+      <div class="form-group"><label class="form-label">Payment date</label><input class="form-input" id="inp-sdate" type="date" value="${S.schedDate}" min="${new Date().toISOString().split('T')[0]}"></div>
+      <div class="form-group"><label class="form-label">Amount (£)</label><input class="form-input" id="inp-samt" type="number" min="1" step="0.01" placeholder="0.00" value="${S.schedAmt||''}"></div>
     </div>
-    <div class="form-group">
-      <label class="form-label">Payment method</label>
-      <select class="form-select" id="inp-sched-method">
-        <option>Debit card</option>
-        <option>Direct debit</option>
-      </select>
-    </div>
-    <button class="btn btn-primary btn-lg btn-block mt-8" onclick="submitSchedule()">Schedule payment →</button>
+    <div class="form-group"><label class="form-label">Payment method</label><select class="form-select"><option>Debit card</option><option>Direct debit</option></select></div>
+    <div class="alert alert-info mt-8">${I.info}<span>We'll send a confirmation email and a reminder 3 days before the payment is taken.</span></div>
+    <button class="btn btn-primary btn-lg btn-block mt-8" onclick="doSchedule()">Schedule payment →</button>
   </div>`;
 }
 
-function renderPlan() {
-  if (state.planComplete) return `
-    <div class="text-center" style="padding:40px 20px;">
-      <div style="font-size:64px;margin-bottom:16px;">✅</div>
-      <h2 style="font-family:var(--font-display);font-size:28px;margin-bottom:8px;">Plan set up</h2>
-      <p style="color:var(--text-secondary);margin-bottom:8px;">Your payment plan has been set up successfully.</p>
-      <p style="font-size:13px;color:var(--text-muted);margin-bottom:28px;">£${parseFloat(state.planAmount).toFixed(2)} ${state.planFreq} starting next ${state.planFreq === 'monthly' ? 'month' : 'week'}. A confirmation has been sent to your email.</p>
-      <button class="btn btn-primary btn-lg" onclick="go('home')">Back to home</button>
-    </div>`;
-
+function rPlan(){
+  if(S.planDone) return `<div class="success-screen"><div class="success-icon">${I.check}</div><div class="success-title">Plan set up successfully</div><div class="success-desc">£${parseFloat(S.planAmt).toFixed(2)} ${S.planFreq} — first payment next ${S.planFreq==="monthly"?"month":"week"}.</div><div class="success-sub">Confirmation sent to your email address.</div><button class="btn btn-primary btn-lg" onclick="go('home')">Back to home</button></div>`;
+  const amt=parseFloat(S.planAmt)||0,pmts=amt>=5?Math.ceil(S.acct.balance/amt):null;
   return `
-  <div class="page-header">
-    <div class="page-title">Set up a payment plan</div>
-    <div class="page-subtitle">Spread your balance with a regular payment that suits you.</div>
-  </div>
-
-  <div class="alert alert-info">
-    <span>ℹ️</span>
-    <span>We recommend completing the <a href="#" onclick="go('ie');return false;" style="color:var(--brand-primary);font-weight:600;">Budget Tool</a> first so we can suggest an affordable amount for you.</span>
-  </div>
-
+  <div class="page-header"><div class="page-title">Set up a payment plan</div><div class="page-subtitle">Spread your balance with affordable regular payments.</div></div>
+  <div class="alert alert-info">${I.info}<div>We recommend completing the <a href="#" onclick="go('ie');return false;" style="color:var(--brand-primary);font-weight:600;">Budget Tool</a> first to help find the right amount for you.</div></div>
   <div class="card">
-    <div class="card-title"><span class="icon">📋</span> Plan details</div>
-    <div class="form-group">
-      <label class="form-label">Payment frequency</label>
-      <select class="form-select" id="inp-freq" onchange="setState({planFreq:this.value})">
-        <option value="weekly" ${state.planFreq==='weekly'?'selected':''}>Weekly</option>
-        <option value="fortnightly" ${state.planFreq==='fortnightly'?'selected':''}>Fortnightly</option>
-        <option value="monthly" ${state.planFreq==='monthly'?'selected':''}>Monthly</option>
-      </select>
+    <div class="card-title">${cic('plan')} Plan details</div>
+    <div class="form-row">
+      <div class="form-group"><label class="form-label">Frequency</label><select class="form-select" onchange="set({planFreq:this.value})"><option value="weekly" ${S.planFreq==="weekly"?"selected":""}>Weekly</option><option value="fortnightly" ${S.planFreq==="fortnightly"?"selected":""}>Fortnightly</option><option value="monthly" ${S.planFreq==="monthly"?"selected":""}>Monthly</option></select></div>
+      <div class="form-group"><label class="form-label">Amount (£)</label><input class="form-input" id="inp-plnamt" type="number" min="1" step="0.01" placeholder="0.00" value="${S.planAmt}" oninput="S.planAmt=this.value;render();"><p class="form-hint">Minimum £5.00</p></div>
     </div>
-    <div class="form-group">
-      <label class="form-label">Payment amount (£)</label>
-      <input class="form-input" id="inp-planamt" type="number" min="1" step="0.01" placeholder="0.00" value="${state.planAmount}">
-      <p class="form-hint">Minimum: £5.00 per payment</p>
-    </div>
-    <div class="form-group">
-      <label class="form-label">Collection method</label>
-      <select class="form-select" id="inp-planmethod">
-        <option>Direct debit</option>
-        <option>Recurring card payment</option>
-      </select>
-    </div>
+    <div class="form-group"><label class="form-label">Collection method</label><select class="form-select"><option>Direct debit</option><option>Recurring card payment</option></select></div>
   </div>
-
-  ${state.planAmount && parseFloat(state.planAmount) >= 5 ? `
-  <div class="card">
-    <div class="card-title">Plan summary</div>
-    <div class="plan-summary">
-      <div class="summary-row"><span class="summary-key">Balance</span><span>£${state.activeAccount.balance.toFixed(2)}</span></div>
-      <div class="summary-row"><span class="summary-key">${state.planFreq.charAt(0).toUpperCase()+state.planFreq.slice(1)} payment</span><span>£${parseFloat(state.planAmount).toFixed(2)}</span></div>
-      <div class="summary-row"><span class="summary-key">Estimated completion</span><span>~${Math.ceil(state.activeAccount.balance / parseFloat(state.planAmount))} payments</span></div>
-    </div>
-    <button class="btn btn-primary btn-lg btn-block" onclick="submitPlan()">Confirm plan →</button>
-  </div>` : ''}`;
+  ${amt>=5?`<div class="card"><div class="card-title">Plan summary</div>
+    <div class="summary-row"><span class="summary-key">Balance</span><span>£${S.acct.balance.toFixed(2)}</span></div>
+    <div class="summary-row"><span class="summary-key">${S.planFreq.charAt(0).toUpperCase()+S.planFreq.slice(1)} payment</span><span>£${amt.toFixed(2)}</span></div>
+    <div class="summary-row"><span class="summary-key">Estimated completion</span><span>~${pmts} payments</span></div>
+  </div><button class="btn btn-primary btn-lg btn-block" onclick="doPlan()">Confirm plan →</button>`:''}`;
 }
 
-function renderIE() {
-  if (state.ieComplete) return `
-    <div class="text-center" style="padding:40px 20px;">
-      <div style="font-size:64px;margin-bottom:16px;">✅</div>
-      <h2 style="font-family:var(--font-display);font-size:28px;margin-bottom:8px;">Budget saved</h2>
-      <p style="color:var(--text-secondary);margin-bottom:8px;">Your income & expenditure has been recorded.</p>
-      <p style="font-size:13px;margin-bottom:8px;">
-        Monthly surplus / deficit: 
-        <strong style="color:${state.ieSurplus >= 0 ? 'var(--brand-success)' : 'var(--brand-danger)'}">
-          ${state.ieSurplus >= 0 ? '+' : ''}£${state.ieSurplus ? state.ieSurplus.toFixed(2) : '0.00'}
-        </strong>
-      </p>
-      ${state.ieSurplus > 0 ? `<div class="alert alert-success" style="text-align:left;margin-bottom:20px;"><span>💡</span><span>Based on your budget, you could afford <strong>£${state.ieSurplus.toFixed(2)}</strong> per month. <a href="#" onclick="setState({planAmount:'${state.ieSurplus.toFixed(2)}',ieComplete:false});go('plan');return false;">Set up a plan with this amount</a>.</span></div>` : ''}
-      <button class="btn btn-primary btn-lg" onclick="go('home')">Back to home</button>
-    </div>`;
-
-  const cats = {
-    income: ["Employment income","Benefits","Other income"],
-    housing: ["Rent / Mortgage","Council tax","Gas","Electricity","Water","Buildings & contents insurance"],
-    living: ["Food & groceries","Clothing","Medical costs","Childcare","School costs"],
-    transport: ["Car finance","Fuel","Public transport","Car insurance","Road tax"],
-    other: ["Mobile phone","Broadband","TV licence","Subscriptions","Other debt payments","Savings"]
-  };
-
-  const vals = state.ieData;
-  const totalIn = (cats.income).reduce((s,k) => s + (parseFloat(vals[k])||0), 0);
-  const totalOut = Object.keys(cats).filter(c=>c!=='income').flatMap(c=>cats[c]).reduce((s,k) => s + (parseFloat(vals[k])||0), 0);
-  const surplus = totalIn - totalOut;
-
+function rIE(){
+  if(S.ieDone) return `<div class="success-screen"><div class="success-icon">${I.check}</div><div class="success-title">Budget saved</div>
+    <div class="success-desc">Monthly ${S.ieSurplus>=0?"surplus":"deficit"}: <strong style="color:${S.ieSurplus>=0?"var(--brand-success)":"var(--brand-danger)"};">${S.ieSurplus>=0?"+":""}£${Math.abs(S.ieSurplus||0).toFixed(2)}</strong></div>
+    <div class="success-sub">Your income & expenditure has been recorded against your account.</div>
+    ${S.ieSurplus>0?`<div class="alert alert-success" style="text-align:left;margin-bottom:20px;">${I.info}<span>Based on your budget you could comfortably afford <strong>£${S.ieSurplus.toFixed(2)}/month</strong>. <a href="#" onclick="set({planAmt:'${S.ieSurplus.toFixed(2)}',ieDone:false});go('plan');return false;">Set up a plan →</a></span></div>`:''}
+    <button class="btn btn-primary btn-lg" onclick="go('home')">Back to home</button></div>`;
+  const cats={"Monthly income":["Employment income","Benefits / Tax credits","Pension","Other income"],"Housing & utilities":["Rent / Mortgage","Council tax","Gas","Electricity","Water","Buildings & contents insurance"],"Living costs":["Food & groceries","Clothing & footwear","Medical & dental","Childcare","School costs","Personal care"],"Transport":["Car finance","Fuel","Public transport","Car insurance","Road tax & MOT"],"Other":["Mobile phone","Broadband","TV licence","Subscriptions","Other debt payments","Savings"]};
+  const inc=cats["Monthly income"].reduce((s,k)=>s+(parseFloat(S.ie[k])||0),0);
+  const out=Object.entries(cats).filter(([k])=>k!=="Monthly income").flatMap(([,v])=>v).reduce((s,k)=>s+(parseFloat(S.ie[k])||0),0);
+  const surp=inc-out;
   return `
-  <div class="page-header">
-    <div class="page-title">Budget tool</div>
-    <div class="page-subtitle">Complete your income & expenditure to help us find the right plan for you.</div>
-  </div>
-
+  <div class="page-header"><div class="page-title">Budget tool</div><div class="page-subtitle">Complete your income & expenditure so we can suggest an affordable plan.</div></div>
   <div class="card">
-    ${Object.entries(cats).map(([section, items]) => `
-      <div class="ie-section">
-        <div class="ie-section-title">${section === 'housing' ? 'Housing & utilities' : section === 'living' ? 'Living costs' : section === 'transport' ? 'Transport' : section === 'other' ? 'Other' : 'Monthly income'}</div>
-        ${items.map(item => `
-          <div class="ie-row">
-            <span class="ie-row-label">${item}</span>
-            <div style="display:flex;align-items:center;gap:6px;">
-              <span style="font-size:14px;color:var(--text-muted);">£</span>
-              <input class="ie-input" type="number" min="0" step="1" placeholder="0" value="${vals[item]||''}" data-ie="${item}" oninput="updateIE('${item}',this.value)">
-            </div>
-          </div>
-        `).join('')}
-      </div>
-    `).join('')}
-
+    ${Object.entries(cats).map(([sec,items])=>`<div class="ie-section"><div class="ie-section-title">${sec}</div>${items.map(item=>`<div class="ie-row"><span class="ie-row-label">${item}</span><div class="ie-input-wrap"><span class="ie-prefix">£</span><input class="ie-input" type="number" min="0" step="1" placeholder="0" value="${S.ie[item]||''}" oninput="S.ie['${item}']=this.value;render();"></div></div>`).join('')}</div>`).join('')}
     <div class="ie-totals">
-      <div class="ie-total-row"><span>Total monthly income</span><span>£${totalIn.toFixed(2)}</span></div>
-      <div class="ie-total-row"><span>Total monthly outgoings</span><span>£${totalOut.toFixed(2)}</span></div>
-      <hr style="border:none;border-top:1px solid var(--border);margin:8px 0;">
-      <div class="ie-total-row ${surplus >= 0 ? 'surplus' : 'deficit'}">
-        <span>${surplus >= 0 ? 'Monthly surplus' : 'Monthly deficit'}</span>
-        <span>${surplus >= 0 ? '+' : ''}£${surplus.toFixed(2)}</span>
-      </div>
+      <div class="ie-total-row"><span>Total monthly income</span><strong>£${inc.toFixed(2)}</strong></div>
+      <div class="ie-total-row"><span>Total monthly outgoings</span><strong>£${out.toFixed(2)}</strong></div>
+      <div class="ie-total-row result ${surp>=0?"surplus":"deficit"}"><span>${surp>=0?"Monthly surplus":"Monthly deficit"}</span><strong>${surp>=0?"+":""}£${surp.toFixed(2)}</strong></div>
     </div>
-
-    <button class="btn btn-primary btn-lg btn-block mt-16" onclick="submitIE(${surplus.toFixed(2)})">Save budget →</button>
+    <button class="btn btn-primary btn-lg btn-block mt-16" onclick="doIE(${surp})">Save budget →</button>
   </div>`;
 }
 
-function renderDiscount() {
-  const acct = state.activeAccount;
-  const settleOffer = (acct.balance * 0.6).toFixed(2);
+function rDiscount(){
+  const a=S.acct,settle=(a.balance*0.6).toFixed(2);
   return `
-  <div class="page-header">
-    <div class="page-title">Discount offers</div>
-    <div class="page-subtitle">Special offers available for your account right now.</div>
-  </div>
-
+  <div class="page-header"><div class="page-title">Discount offers</div><div class="page-subtitle">Special offers available on your account right now.</div></div>
   <div class="offer-card">
-    <div class="offer-badge">✨ Exclusive offer</div>
-    <div class="offer-title">Full & final settlement</div>
-    <div class="offer-desc">Clear your account today for a reduced one-off payment. This offer is available for a limited time and will clear your balance in full.</div>
-    <div class="offer-was">Full balance: £${acct.balance.toFixed(2)}</div>
-    <div class="offer-amount">£${settleOffer}</div>
-    <div style="margin-top:16px;display:flex;gap:12px;flex-wrap:wrap;">
-      <button class="btn btn-accent btn-lg" onclick="go('pay')">Accept offer →</button>
-      <button class="btn" style="background:rgba(255,255,255,0.15);color:white;border:1px solid rgba(255,255,255,0.3);" onclick="showTerms()">View terms</button>
-    </div>
+    <div class="offer-badge">✦ Exclusive offer</div>
+    <div class="offer-title">Full &amp; final settlement</div>
+    <div class="offer-desc">Clear your account today with a single reduced payment. This time-limited offer will clear your balance in full once accepted.</div>
+    <div class="offer-was">Full balance: £${a.balance.toFixed(2)}</div>
+    <div class="offer-amount">£${settle}</div>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;"><button class="btn btn-accent btn-lg" onclick="go('pay')">Accept &amp; pay →</button><button class="btn" style="background:rgba(255,255,255,0.1);color:white;border:1px solid rgba(255,255,255,0.25);" onclick="showTerms()">View terms</button></div>
   </div>
-
-  <div class="card">
-    <div class="card-title"><span class="icon">📋</span> How settlement works</div>
-    <div style="display:flex;flex-direction:column;gap:12px;">
-      ${[
-        ["1","Pay the settlement amount","Make a single payment of £"+settleOffer+" and your account will be cleared."],
-        ["2","Account marked as settled","Your account will be updated to show as settled — not paid in full."],
-        ["3","Credit file update","The account will be updated on your credit file as partially settled."]
-      ].map(([n,t,d]) => `
-        <div style="display:flex;gap:12px;align-items:flex-start;">
-          <div style="width:28px;height:28px;border-radius:50%;background:var(--brand-light);color:var(--brand-primary);font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">${n}</div>
-          <div><div style="font-weight:600;font-size:14px;">${t}</div><div style="font-size:13px;color:var(--text-secondary);">${d}</div></div>
-        </div>
-      `).join('')}
-    </div>
+  <div class="card"><div class="card-title">${cic('info')} How settlement works</div>
+    <div style="display:flex;flex-direction:column;gap:14px;">${[["1","Pay the settlement amount","Make a single payment of £"+settle+" and your account will be cleared immediately."],["2","Account marked as settled","Your account will be marked as settled — not paid in full."],["3","Credit file update","The account will be updated on your credit file as partially settled within 30 days."]].map(([n,t,d])=>`<div style="display:flex;gap:12px;align-items:flex-start;"><div style="width:28px;height:28px;border-radius:50%;background:var(--brand-light);color:var(--brand-primary);font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">${n}</div><div><div style="font-weight:600;font-size:14px;margin-bottom:2px;">${t}</div><div style="font-size:13px;color:var(--text-secondary);line-height:1.5;">${d}</div></div></div>`).join('')}</div>
   </div>`;
 }
 
-function renderTransactions() {
-  const txns = TRANSACTIONS[state.activeAccount.ref] || [];
+function rTx(){
+  const txs=TXS[S.acct.ref]||[];
   return `
-  <div class="page-header">
-    <div class="page-title">Transactions</div>
-    <div class="page-subtitle">Full history for account ${state.activeAccount.ref}.</div>
-  </div>
+  <div class="page-header"><div class="page-title">Transactions</div><div class="page-subtitle">Full payment history for account ${S.acct.ref}.</div></div>
   <div class="card">
-    <div class="tx-list">
-      ${txns.length === 0 ? '<p style="color:var(--text-muted);font-size:14px;">No transactions yet.</p>' :
-        txns.map(t => `
-          <div class="tx-item">
-            <div class="tx-left">
-              <div class="tx-icon ${t.type}">${t.type === 'credit' ? '↑' : t.type === 'debit' ? '↓' : '📋'}</div>
-              <div>
-                <div class="tx-desc">${t.desc}</div>
-                <div class="tx-date">${t.date}</div>
-              </div>
-            </div>
-            ${t.amount ? `<div class="tx-amount ${t.type}">${t.type === 'credit' ? '+' : '-'}£${t.amount.toFixed(2)}</div>` : '<div class="badge badge-blue">Plan</div>'}
-          </div>
-        `).join('')
-      }
-    </div>
+    ${txs.length===0?`<div style="text-align:center;padding:40px 20px;">${I.list.replace('class="nav-svg"','style="width:44px;height:44px;color:var(--text-muted);display:block;margin:0 auto 14px;"')}<h3 style="font-size:16px;font-weight:600;margin-bottom:6px;">No transactions yet</h3><p style="font-size:14px;color:var(--text-secondary);">Once you make a payment it will appear here.</p><button class="btn btn-primary mt-16" onclick="go('pay')">Make a payment</button></div>`:`
+    <div class="tx-list">${txs.map(t=>`<div class="tx-item"><div class="tx-left"><div class="tx-icon ${t.type}">${t.type==="credit"?I.up:t.type==="debit"?I.down:I.plan.replace('class="nav-svg"','')}</div><div><div class="tx-desc">${t.desc}</div><div class="tx-date">${t.date}</div></div></div>${t.amount?`<div class="tx-amount ${t.type}">${t.type==="credit"?"+":"-"}£${t.amount.toFixed(2)}</div>`:`<div class="badge badge-blue">Plan</div>`}</div>`).join('')}</div>`}
   </div>`;
 }
 
-function renderDetails() {
-  const acct = state.activeAccount;
+function rDetails(){
+  const a=S.acct;
   return `
-  <div class="page-header">
-    <div class="page-title">My details</div>
-    <div class="page-subtitle">Update your contact information.</div>
+  <div class="page-header"><div class="page-title">My details</div><div class="page-subtitle">Keep your contact information up to date.</div></div>
+  <div class="card"><div class="card-title">${cic('user')} Personal information</div>
+    <div class="form-row"><div class="form-group"><label class="form-label">First name</label><input class="form-input" type="text" value="${S.user.name.split(' ')[0]}"></div><div class="form-group"><label class="form-label">Last name</label><input class="form-input" type="text" value="${S.user.name.split(' ').slice(1).join(' ')}"></div></div>
+    <div class="form-group"><label class="form-label">Email address</label><input class="form-input" type="email" value="${S.user.email||'user@example.com'}"></div>
+    <div class="form-group"><label class="form-label">Phone number</label><input class="form-input" type="tel" placeholder="07xxx xxxxxx"></div>
+    <div class="form-group"><label class="form-label">Address line 1</label><input class="form-input" type="text" placeholder="Street address"></div>
+    <div class="form-row"><div class="form-group"><label class="form-label">Town / City</label><input class="form-input" type="text"></div><div class="form-group"><label class="form-label">Postcode</label><input class="form-input" type="text" value="${a?a.postcode:''}"></div></div>
+    <button class="btn btn-primary mt-8" onclick="alert('Details updated.')">Save changes</button>
   </div>
-  <div class="card">
-    <div class="card-title"><span class="icon">👤</span> Personal information</div>
-    <div class="form-row">
-      <div class="form-group">
-        <label class="form-label">First name</label>
-        <input class="form-input" type="text" value="${state.user.name.split(' ')[0]}">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Last name</label>
-        <input class="form-input" type="text" value="${state.user.name.split(' ').slice(1).join(' ')}">
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="form-label">Email address</label>
-      <input class="form-input" type="email" value="${state.user.email || 'user@example.com'}">
-    </div>
-    <div class="form-group">
-      <label class="form-label">Phone number</label>
-      <input class="form-input" type="tel" placeholder="07xxx xxxxxx">
-    </div>
-    <div class="form-group">
-      <label class="form-label">Address line 1</label>
-      <input class="form-input" type="text" placeholder="Street address">
-    </div>
-    <div class="form-row">
-      <div class="form-group">
-        <label class="form-label">Town / City</label>
-        <input class="form-input" type="text" placeholder="">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Postcode</label>
-        <input class="form-input" type="text" value="${acct ? acct.postcode : ''}">
-      </div>
-    </div>
-    <button class="btn btn-primary mt-8" onclick="alert('Details updated (demo)')">Save changes</button>
-  </div>
-  <div class="card">
-    <div class="card-title"><span class="icon">🔒</span> Change password</div>
-    <div class="form-group">
-      <label class="form-label">Current password</label>
-      <input class="form-input" type="password" placeholder="••••••••">
-    </div>
-    <div class="form-group">
-      <label class="form-label">New password</label>
-      <input class="form-input" type="password" placeholder="Minimum 8 characters">
-    </div>
-    <div class="form-group">
-      <label class="form-label">Confirm new password</label>
-      <input class="form-input" type="password" placeholder="Repeat password">
-    </div>
+  <div class="card"><div class="card-title">${cic('shield')} Change password</div>
+    <div class="form-group"><label class="form-label">Current password</label><input class="form-input" type="password" placeholder="••••••••"></div>
+    <div class="form-group"><label class="form-label">New password</label><input class="form-input" type="password" placeholder="Minimum 8 characters"></div>
+    <div class="form-group"><label class="form-label">Confirm new password</label><input class="form-input" type="password" placeholder="Repeat password"></div>
     <button class="btn btn-outline mt-8">Update password</button>
   </div>`;
 }
 
-function renderOpenBanking() {
+function rOB(){
+  const banks=[{n:"Barclays",c:"#00AEEF",l:"B"},{n:"Lloyds",c:"#006A4E",l:"L"},{n:"NatWest",c:"#5A1E82",l:"N"},{n:"HSBC",c:"#DB0011",l:"H"},{n:"Halifax",c:"#009BDE",l:"H"},{n:"Monzo",c:"#FF3464",l:"M"}];
   return `
-  <div class="page-header">
-    <div class="page-title">Open banking</div>
-    <div class="page-subtitle">Share your bank data securely to help us understand your situation.</div>
-  </div>
-  <div class="alert alert-info">
-    <span>🔒</span>
-    <div>Open banking uses secure, FCA-regulated connections. We never see your login details or store your banking credentials.</div>
-  </div>
-  <div class="card">
-    <div class="card-title"><span class="icon">🏦</span> Why use open banking?</div>
-    <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:20px;">
-      ${[
-        ["⚡","Faster I&E","Skip the manual budget form — we pull your income and spending automatically."],
-        ["💡","Better offers","We can make more tailored settlement and plan offers based on real data."],
-        ["🔒","Secure & regulated","Your data is encrypted and shared under open banking regulations."]
-      ].map(([i,t,d]) => `
-        <div style="display:flex;gap:12px;align-items:flex-start;">
-          <span style="font-size:20px;">${i}</span>
-          <div><div style="font-weight:600;font-size:14px;margin-bottom:2px;">${t}</div><div style="font-size:13px;color:var(--text-secondary);">${d}</div></div>
-        </div>
-      `).join('')}
-    </div>
-    <div style="font-size:13px;font-weight:600;color:var(--text-secondary);margin-bottom:10px;text-transform:uppercase;letter-spacing:0.5px;">Select your bank</div>
-    <div class="ob-providers">
-      ${[["🏦","Barclays"],["🔵","Lloyds"],["🟠","NatWest"],["🟣","HSBC"],["🟢","Halifax"],["⚫","Monzo"]].map(([logo,name]) => `
-        <div class="ob-provider" onclick="alert('Connecting to ${name} (demo)...')">
-          <span class="bank-logo">${logo}</span>
-          <span class="bank-name">${name}</span>
-        </div>
-      `).join('')}
-    </div>
-    <button class="btn btn-ghost btn-block">Don't see your bank? Search all banks →</button>
+  <div class="page-header"><div class="page-title">Open banking</div><div class="page-subtitle">Share your bank data securely to help us understand your situation.</div></div>
+  <div class="alert alert-info">${I.shield}<div><strong>FCA regulated & secure.</strong> Open banking uses regulated connections — we never see your login details or store your banking password.</div></div>
+  <div class="card"><div class="card-title">${cic('bank')} Why use open banking?</div>
+    <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:24px;">${[[I.chart,"Faster budget assessment","We automatically calculate your income and spending — no manual forms."],[I.tag,"Better tailored offers","Real financial data means more accurate settlement and plan offers."],[I.shield,"Secure & encrypted","Protected under FCA open banking regulations and encrypted in transit."]].map(([icon,t,d])=>`<div style="display:flex;gap:12px;align-items:flex-start;"><div style="width:36px;height:36px;border-radius:50%;background:var(--brand-light);display:flex;align-items:center;justify-content:center;flex-shrink:0;">${icon.replace('class="nav-svg"','style="width:18px;height:18px;color:var(--brand-primary);"')}</div><div><div style="font-weight:600;font-size:14px;margin-bottom:2px;">${t}</div><div style="font-size:13px;color:var(--text-secondary);line-height:1.5;">${d}</div></div></div>`).join('')}</div>
+    <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.6px;color:var(--text-muted);margin-bottom:12px;">Select your bank</div>
+    <div class="ob-providers">${banks.map(b=>`<div class="ob-provider" onclick="alert('Connecting to ${b.n}... (demo)')"><div class="ob-provider-logo" style="background:${b.c}20;color:${b.c};">${b.l}</div><div class="ob-provider-name">${b.n}</div></div>`).join('')}</div>
+    <button class="btn btn-ghost btn-block">Don't see your bank? Search all →</button>
   </div>`;
 }
 
-function renderBreathing() {
-  if (state.breathingActive) return `
-    <div class="text-center" style="padding:40px 20px;">
-      <div style="font-size:64px;margin-bottom:16px;">🌿</div>
-      <h2 style="font-family:var(--font-display);font-size:28px;margin-bottom:8px;">Breathing space applied</h2>
-      <div class="badge badge-green" style="margin-bottom:16px;">Active until ${new Date(Date.now()+60*24*60*60*1000).toLocaleDateString('en-GB')}</div>
-      <p style="color:var(--text-secondary);margin-bottom:8px;">You are now protected under the Debt Respite Scheme for 60 days. We will pause all contact and collection activity.</p>
-      <button class="btn btn-primary btn-lg mt-16" onclick="go('home')">Back to home</button>
-    </div>`;
-
+function rBreathing(){
+  if(S.breathing){
+    const exp=new Date(Date.now()+60*24*60*60*1000).toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
+    return `<div class="success-screen"><div class="success-icon" style="background:#d1fae5;">${I.leaf.replace('class="nav-svg"','style="width:32px;height:32px;color:var(--brand-success);"')}</div><div class="success-title">Breathing space active</div><div style="margin-bottom:14px;"><span class="badge badge-green">Active until ${exp}</span></div><div class="success-desc">You are protected under the Debt Respite Scheme for 60 days.</div><div class="success-sub">All contact and debt collection activity has been paused.</div><button class="btn btn-primary btn-lg" onclick="go('home')">Back to home</button></div>`;
+  }
   return `
-  <div class="page-header">
-    <div class="page-title">Breathing space</div>
-    <div class="page-subtitle">The Debt Respite Scheme gives you legal protection while you get debt advice.</div>
-  </div>
-  <div class="card">
-    <div class="card-title"><span class="icon">🌿</span> What is breathing space?</div>
-    <div class="bs-info">
-      ${[
-        ["⏸️","Pauses collection","All contact and debt collection activity is paused."],
-        ["⏱️","60 days protection","Standard breathing space lasts 60 days."],
-        ["💊","Mental health variant","Those in mental health crisis treatment can get extended protection."],
-        ["🏛️","Government scheme","This is a legal right under the Debt Respite Scheme (England & Wales)."],
-      ].map(([i,t,d]) => `
-        <div class="bs-point">
-          <div class="bs-dot">${i}</div>
-          <div><div style="font-weight:600;font-size:14px;margin-bottom:2px;">${t}</div><div style="font-size:13px;color:var(--text-secondary);">${d}</div></div>
-        </div>
-      `).join('')}
-    </div>
-    <div class="alert alert-warning">
-      <span>⚠️</span>
-      <div>Breathing space must be applied for through a debt adviser, not directly. Use the button below to find a free, regulated debt advice service.</div>
-    </div>
-    <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:4px;">
-      <button class="btn btn-primary" onclick="setState({breathingActive:true});render()">Request breathing space</button>
-      <a href="https://www.moneyhelper.org.uk" target="_blank" class="btn btn-outline">Find free debt advice →</a>
-    </div>
+  <div class="page-header"><div class="page-title">Breathing space</div><div class="page-subtitle">Legal protection while you get debt advice and make a plan.</div></div>
+  <div class="card"><div class="card-title">${cic('leaf')} What is breathing space?</div>
+    <p style="font-size:14px;color:var(--text-secondary);margin-bottom:18px;line-height:1.7;">The Debt Respite Scheme gives people in problem debt the right to legal protections from creditor action while they get advice and make a plan to deal with their debts.</p>
+    <div class="bs-grid">${[[I.clock,"Pauses collection","All contact and debt collection activity is paused for the duration."],[I.shield,"60 days protection","Standard breathing space provides 60 days of legal protection."],[I.leaf,"Mental health variant","Extended protection for those receiving mental health crisis treatment."],[I.info,"England & Wales only","This is a legal right under the Debt Respite Scheme (England & Wales)."]].map(([icon,t,d])=>`<div class="bs-point"><div class="bs-icon">${icon.replace('class="nav-svg"','style="width:16px;height:16px;color:var(--brand-primary);"')}</div><div><div class="bs-point-title">${t}</div><div class="bs-point-desc">${d}</div></div></div>`).join('')}</div>
+    <div class="alert alert-warning">${I.warn}<div>Breathing space must be applied for through a <strong>free debt adviser</strong>, not directly. Use the link below to find help.</div></div>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;"><button class="btn btn-primary" onclick="set({breathing:true})">${I.leaf.replace('class="nav-svg"','style="width:16px;height:16px;"')} Request breathing space</button><a href="https://www.moneyhelper.org.uk" target="_blank" class="btn btn-outline">Find free debt advice →</a></div>
   </div>`;
 }
 
 // ── Actions ──
-function submitRef() {
-  const ref = document.getElementById('inp-ref').value.trim();
-  const found = CSV_DATA.find(a => a.ref === ref);
-  if (!found) { document.getElementById('ref-error').classList.remove('hidden'); return; }
-  setState({ loginRef: ref, loginStep: 'idv' });
-}
+function doRef(){const ref=document.getElementById('inp-ref').value.trim();if(!DATA.find(a=>a.ref===ref)){document.getElementById('ref-err').classList.remove('hidden');return;}set({loginRef:ref,step:'idv'});}
+function doIDV(){const dob=document.getElementById('inp-dob').value,pc=document.getElementById('inp-pc').value.trim().toUpperCase().replace(/\s/g,'');const a=DATA.find(x=>x.ref===S.loginRef);if(dob!==a.dob||pc!==a.postcode.replace(/\s/g,'').toUpperCase()){document.getElementById('idv-err').classList.remove('hidden');return;}set({loginDob:dob,loginPc:pc,step:'register'});}
+function doReg(){const email=document.getElementById('inp-email').value,pass=document.getElementById('inp-pass').value,pass2=document.getElementById('inp-pass2').value,err=document.getElementById('reg-err'),txt=document.getElementById('reg-err-txt');if(!email||!pass){txt.textContent='Please complete all fields.';err.classList.remove('hidden');return;}if(pass.length<8){txt.textContent='Password must be at least 8 characters.';err.classList.remove('hidden');return;}if(pass!==pass2){txt.textContent='Passwords do not match.';err.classList.remove('hidden');return;}const a=DATA.find(x=>x.ref===S.loginRef);set({screen:'home',user:{name:a.name,email,accounts:DATA.filter(x=>x.dob===a.dob)},acct:a});}
+function switchAcct(ref){set({acct:DATA.find(a=>a.ref===ref),screen:'home'});}
+function doPay(){const el=document.getElementById('inp-payamt');const amt=parseFloat(el?el.value:S.payAmt);if(!amt||amt<5){alert('Minimum payment is £5.00');return;}S.acct.balance=Math.max(0,S.acct.balance-amt);set({payDone:true,payAmt:amt.toString()});}
+function doSchedule(){const d=document.getElementById('inp-sdate').value,a=document.getElementById('inp-samt').value;if(!d||!a){alert('Please complete all fields.');return;}set({schedDone:true,schedDate:d,schedAmt:a});}
+function doPlan(){set({planDone:true});}
+function doIE(s){set({ieDone:true,ieSurplus:s});}
+function showTerms(){alert('Settlement terms:\n\n• Payment must be made in full on the agreed date.\n• Account will be marked as "Partially Settled" on your credit file.\n• This offer may be withdrawn at any time.\n• Offer valid for 30 days.');}
+function bindEvents(){const r=document.getElementById('inp-ref');if(r)r.addEventListener('keypress',e=>{if(e.key==='Enter')doRef();});}
 
-function submitIDV() {
-  const dob = document.getElementById('inp-dob').value;
-  const pc = document.getElementById('inp-pc').value.trim().toUpperCase().replace(/\s/g,'');
-  const acct = CSV_DATA.find(a => a.ref === state.loginRef);
-  const pcMatch = pc === acct.postcode.replace(/\s/g,'').toUpperCase();
-  const dobMatch = dob === acct.dob;
-  if (!dobMatch || !pcMatch) { document.getElementById('idv-error').classList.remove('hidden'); return; }
-  setState({ loginDob: dob, loginPostcode: pc, loginStep: 'register' });
-}
-
-function submitRegister() {
-  const email = document.getElementById('inp-email').value;
-  const pass = document.getElementById('inp-pass').value;
-  const pass2 = document.getElementById('inp-pass2').value;
-  const errEl = document.getElementById('reg-error');
-  if (!email || !pass) { errEl.textContent = 'Please complete all fields.'; errEl.classList.remove('hidden'); return; }
-  if (pass.length < 8) { errEl.textContent = 'Password must be at least 8 characters.'; errEl.classList.remove('hidden'); return; }
-  if (pass !== pass2) { errEl.textContent = 'Passwords do not match.'; errEl.classList.remove('hidden'); return; }
-
-  const allAccounts = CSV_DATA.filter(a => a.dob === CSV_DATA.find(x=>x.ref===state.loginRef).dob);
-  const acct = CSV_DATA.find(a => a.ref === state.loginRef);
-  setState({
-    screen: 'home',
-    user: { name: acct.name, email, accounts: allAccounts },
-    activeAccount: acct
-  });
-}
-
-function switchAccount(ref) {
-  const acct = CSV_DATA.find(a => a.ref === ref);
-  setState({ activeAccount: acct, screen: 'home' });
-}
-
-function submitPayment() {
-  const amt = parseFloat(document.getElementById('inp-payamt')?.value || state.payAmount);
-  if (!amt || amt < 5) { alert('Minimum payment is £5.00'); return; }
-  state.activeAccount.balance = Math.max(0, state.activeAccount.balance - amt);
-  setState({ payComplete: true, payAmount: amt.toString() });
-}
-
-function submitSchedule() {
-  const date = document.getElementById('inp-sched-date').value;
-  const amt = document.getElementById('inp-sched-amt').value;
-  if (!date || !amt) { alert('Please complete all fields.'); return; }
-  setState({ scheduleComplete: true, scheduleDate: date, scheduleAmt: amt });
-}
-
-function submitPlan() {
-  setState({ planComplete: true });
-}
-
-function updateIE(key, val) {
-  state.ieData[key] = val;
-}
-
-function submitIE(surplus) {
-  setState({ ieComplete: true, ieSurplus: surplus });
-}
-
-function showTerms() {
-  alert('Settlement terms:\n\n• Payment must be made in full on the agreed date.\n• Account will be marked as "Partially Settled" on your credit file.\n• This offer may be withdrawn at any time.\n• Offer expires in 30 days.');
-}
-
-// ── Event binding ──
-function bindEvents() {
-  const ref = document.getElementById('inp-ref');
-  if (ref) ref.addEventListener('keypress', e => { if(e.key==='Enter') submitRef(); });
-  const payamt = document.getElementById('inp-payamt');
-  if (payamt) payamt.addEventListener('input', e => { state.payAmount = e.target.value; });
-  const planamt = document.getElementById('inp-planamt');
-  if (planamt) planamt.addEventListener('input', e => { state.planAmount = e.target.value; render(); });
-}
-
-// ── Boot ──
 render();
 </script>
 </body>
